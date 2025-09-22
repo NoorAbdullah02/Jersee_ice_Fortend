@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Jersey - ICE Department</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Network Status Indicator -->
+    <div class="network-status" id="networkStatus">
+        <i class="fas fa-wifi"></i> <span id="networkText">Connected</span>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="spinner"></div>
+            <h3>Processing Your Order...</h3>
+            <p>Please wait while we submit your jersey order</p>
+        </div>
+    </div>
+
+    <!-- Advanced Animated Background Particles -->
+    <div class="particles"></div>
+
+    <!-- Futuristic Hero Header -->
+    <section class="hero-header" data-aos="fade-down">
+        <div class="hero-content">
+            <h1 class="hero-title" data-aos="fade-up" data-aos-delay="200">
+                <i class="fas fa-tshirt"></i> ICE JERSEY
+            </h1>
+            <p class="hero-subtitle" data-aos="fade-up" data-aos-delay="400">
+                Institute of Computer Engineering • Premium Collection 2025
+            </p>
+            <div class="hero-badges" data-aos="fade-up" data-aos-delay="600">
+                <div class="hero-badge">
+                    <i class="fas fa-star"></i> Limited Edition
+                </div>
+                <div class="hero-badge">
+                    <i class="fas fa-shield-alt"></i> Premium Quality
+                </div>
+                <div class="hero-badge">
+                    <i class="fas fa-graduation-cap"></i> Official Department
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Glassmorphism Main Container -->
+    <div class="main-container" data-aos="fade-up" data-aos-delay="800">
+
+        <!-- 3D Jersey Showcase -->
+        <section class="jersey-showcase">
+            <div class="jersey-content">
+                <h2 class="jersey-title">Official ICE Department Jersey</h2>
+
+                <div class="jersey-image-container">
+                    <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                        alt="ICE Department Jersey" class="jersey-image">
+                </div>
+
+                <!-- Dynamic Price Display -->
+                <div class="price-display" id="priceDisplay">
+                    <div class="price-text" id="priceText">৳400</div>
+                    <div class="price-label">Starting Price</div>
+                </div>
+
+                <!-- Size Chart Button -->
+                <button type="button" class="btn size-chart-btn" data-bs-toggle="modal"
+                    data-bs-target="#sizeChartModal">
+                    <i class="fas fa-ruler"></i> View Size Chart
+                </button>
+            </div>
+        </section>
+
+        <!-- Ultra Modern Order Form Section -->
+        <section class="order-section">
+            <h2 class="section-title" data-aos="fade-up">
+                <i class="fas fa-shopping-cart"></i> Place Your Order
+            </h2>
+
+            <form id="jersey-order-form" class="order-form" novalidate>
+                <div class="row">
+                    <!-- Name -->
+                    <div class="col-lg-6 col-md-6" data-aos="fade-right" data-aos-delay="100">
+                        <div class="form-group">
+                            <label for="name" class="form-label">
+                                <i class="fas fa-user"></i> Full Name
+                            </label>
+                            <div class="position-relative">
+                                <input type="text" class="form-control" id="name" name="name"
+                                    placeholder="Enter your full name" required>
+                                <div class="error-message" id="nameError">Please enter your full name</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Student ID -->
+                    <div class="col-lg-6 col-md-6" data-aos="fade-left" data-aos-delay="100">
+                        <div class="form-group">
+                            <label for="studentId" class="form-label">
+                                <i class="fas fa-id-card"></i> Student ID
+                            </label>
+                            <div class="position-relative">
+                                <input type="text" class="form-control" id="studentId" name="studentId"
+                                    placeholder="Enter your student ID" required>
+                                <div class="error-message" id="studentIdError">Please enter your student ID</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Jersey Number -->
+                    <div class="col-lg-6 col-md-6" data-aos="fade-right" data-aos-delay="200">
+                        <div class="form-group">
+                            <label for="jerseyNumber" class="form-label">
+                                <i class="fas fa-hashtag"></i> Jersey Number
+                                <div class="tooltip-container">
+                                    <i class="fas fa-info-circle" style="cursor: help; margin-left: 5px;"></i>
+                                    <span class="tooltip-text">Choose a unique number between 1-99</span>
+                                </div>
+                            </label>
+                            <div class="position-relative">
+                                <input type="number" class="form-control" id="jerseyNumber" name="jerseyNumber"
+                                    placeholder="Enter number (1-99)" min="1" max="99" required>
+                                <div class="error-message" id="jerseyNumberError">Jersey number must be between 1 and 99
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Batch -->
+                    <div class="col-lg-6 col-md-6" data-aos="fade-left" data-aos-delay="200">
+                        <div class="form-group">
+                            <label for="batch" class="form-label">
+                                <i class="fas fa-users"></i> Batch
+                            </label>
+                            <div class="position-relative">
+                                <select class="form-select" id="batch" name="batch" required>
+                                    <option value="">Select your batch</option>
+                                    <option value="14th">14th Batch</option>
+                                    <option value="15th">15th Batch</option>
+                                    <option value="16th">16th Batch</option>
+                                </select>
+                                <div class="error-message" id="batchError">Please select your batch</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Size -->
+                    <div class="col-lg-6 col-md-6" data-aos="fade-right" data-aos-delay="300">
+                        <div class="form-group">
+                            <label for="size" class="form-label">
+                                <i class="fas fa-expand-arrows-alt"></i> Size
+                                <div class="tooltip-container">
+                                    <i class="fas fa-info-circle" style="cursor: help; margin-left: 5px;"></i>
+                                    <span class="tooltip-text">Check size chart for accurate measurements</span>
+                                </div>
+                            </label>
+                            <div class="position-relative">
+                                <select class="form-select" id="size" name="size" required>
+                                    <option value="">Choose your size</option>
+                                    <option value="M">M (Medium)</option>
+                                    <option value="L">L (Large)</option>
+                                    <option value="XL">XL (Extra Large)</option>
+                                    <option value="XXL">XXL (Double Extra Large)</option>
+                                    <option value="XXXL">XXXL (Triple Extra Large)</option>
+                                </select>
+                                <div class="error-message" id="sizeError">Please select your size</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Transaction ID -->
+                    <div class="col-lg-6 col-md-6" data-aos="fade-left" data-aos-delay="300">
+                        <div class="form-group">
+                            <label for="transactionId" class="form-label">
+                                <i class="fas fa-receipt"></i> Transaction ID
+                                <div class="tooltip-container">
+                                    <i class="fas fa-info-circle" style="cursor: help; margin-left: 5px;"></i>
+                                    <span class="tooltip-text">Transaction ID from your payment method</span>
+                                </div>
+                            </label>
+                            <div class="position-relative">
+                                <input type="text" class="form-control" id="transactionId" name="transactionId"
+                                    placeholder="Enter payment transaction ID" required>
+                                <div class="error-message" id="transactionIdError">Please enter transaction ID</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Collar Type -->
+                    <div class="col-lg-6 col-md-6" data-aos="fade-right" data-aos-delay="400">
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-circle-notch"></i> Collar Type
+                            </label>
+                            <div class="radio-container">
+                                <div class="radio-option">
+                                    <input type="radio" id="roundCollar" name="collarType" value="round" required>
+                                    <label for="roundCollar">
+                                        <i class="fas fa-circle"></i><br>Round Collar
+                                    </label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" id="poloCollar" name="collarType" value="polo" required>
+                                    <label for="poloCollar">
+                                        <i class="fas fa-square"></i><br>Polo Collar
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="error-message" id="collarTypeError">Please select collar type</div>
+                        </div>
+                    </div>
+
+                    <!-- Sleeve Type -->
+                    <div class="col-lg-6 col-md-6" data-aos="fade-left" data-aos-delay="400">
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-hand-paper"></i> Sleeve Type
+                            </label>
+                            <div class="radio-container">
+                                <div class="radio-option">
+                                    <input type="radio" id="halfSleeve" name="sleeveType" value="half" required>
+                                    <label for="halfSleeve">
+                                        <i class="fas fa-cut"></i><br>Half Sleeve
+                                    </label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" id="fullSleeve" name="sleeveType" value="full" required>
+                                    <label for="fullSleeve">
+                                        <i class="fas fa-arrows-alt-h"></i><br>Full Sleeve
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="error-message" id="sleeveTypeError">Please select sleeve type</div>
+                        </div>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="col-12" data-aos="fade-up" data-aos-delay="500">
+                        <div class="form-group">
+                            <label for="email" class="form-label">
+                                <i class="fas fa-envelope"></i> Email Address
+                            </label>
+                            <div class="position-relative">
+                                <input type="email" class="form-control" id="email" name="email"
+                                    placeholder="Enter your email for confirmation" required>
+                                <div class="error-message" id="emailError">Please enter a valid email address</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Additional Notes -->
+                    <div class="col-12" data-aos="fade-up" data-aos-delay="600">
+                        <div class="form-group">
+                            <label for="notes" class="form-label">
+                                <i class="fas fa-sticky-note"></i> Special Instructions (Optional)
+                            </label>
+                            <textarea class="form-control" id="notes" name="notes" rows="4"
+                                placeholder="Any special requirements, delivery instructions, or custom requests..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dynamic Payment Information -->
+                <div class="payment-section" data-aos="fade-up" data-aos-delay="700">
+                    <div class="payment-content">
+                        <h3 class="payment-title">
+                            <i class="fas fa-credit-card"></i> Payment Methods
+                        </h3>
+                        <div id="currentPrice" class="mb-3" style="font-size: 1.5rem; font-weight: 800;">
+                            Current Price: <span id="displayPrice">৳400</span>
+                        </div>
+                        <div class="payment-methods">
+                            <div class="payment-method">
+                                <i class="fab fa-bitcoin fa-3x mb-3"></i>
+                                <h5>Bkash</h5>
+                                <p><strong>01748269350</strong></p>
+                                <small>Personal Account</small>
+                            </div>
+                            <div class="payment-method">
+                                <i class="fas fa-wallet fa-3x mb-3"></i>
+                                <h5>Nagad</h5>
+                                <p><strong>01748269350</strong></p>
+                                <small>Personal Account</small>
+                            </div>
+                            <div class="payment-method">
+                                <i class="fas fa-hand-holding-usd fa-3x mb-3"></i>
+                                <h5>Hand Cash</h5>
+                                <p><strong>Give to CR</strong></p>
+                                <small>Direct Payment</small>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <h6><i class="fas fa-info-circle"></i> Pricing Structure:</h6>
+                            <ul style="text-align: left; max-width: 400px; margin: 0 auto;">
+                                <li><strong>Round Collar + Half Sleeve:</strong> ৳400</li>
+                                <li><strong>Round Collar + Full Sleeve:</strong> ৳500</li>
+                                <li><strong>Polo Collar + Half Sleeve:</strong> ৳600</li>
+                                <li><strong>Polo Collar + Full Sleeve:</strong> ৳700</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Epic Submit Button -->
+                <button type="submit" class="submit-btn" id="submit-btn" data-aos="fade-up" data-aos-delay="800">
+                    <span id="button-text">
+                        <i class="fas fa-rocket"></i> Launch My Order
+                    </span>
+                </button>
+
+                <!-- Enhanced Success/Error Messages -->
+                <div id="success-message" class="alert alert-success" style="display: none;">
+                    <div class="text-center">
+                        <i class="fas fa-check-circle fa-3x mb-3"></i>
+                        <h4>Order Placed Successfully!</h4>
+                        <p>Your jersey order has been received and a confirmation email has been sent to your email
+                            address. Our team will contact you soon for final confirmation and delivery details.</p>
+                        <hr>
+                        <small>Order ID: #ICE-<span id="orderId"></span></small>
+                    </div>
+                </div>
+
+                <div id="error-message" class="alert alert-danger" style="display: none;">
+                    <div class="text-center">
+                        <i class="fas fa-exclamation-triangle fa-3x mb-3"></i>
+                        <h4>Oops! Something went wrong</h4>
+                        <p id="error-text">Please check your information and try again.</p>
+                        <button type="button" class="btn btn-outline-light mt-3"
+                            onclick="ErrorHandler.retryLastRequest()">
+                            <i class="fas fa-redo"></i> Try Again
+                        </button>
+                    </div>
+                </div>
+
+                <div id="warning-message" class="alert alert-warning" style="display: none;">
+                    <div class="text-center">
+                        <i class="fas fa-exclamation-circle fa-3x mb-3"></i>
+                        <h4>Warning</h4>
+                        <p id="warning-text">Please review your information.</p>
+                    </div>
+                </div>
+
+                <div id="info-message" class="alert alert-info" style="display: none;">
+                    <div class="text-center">
+                        <i class="fas fa-info-circle fa-3x mb-3"></i>
+                        <h4>Information</h4>
+                        <p id="info-text">Additional information message.</p>
+                    </div>
+                </div>
+            </form>
+        </section>
+    </div>
+
+    <!-- Size Chart Modal -->
+    <div class="modal fade" id="sizeChartModal" tabindex="-1" aria-labelledby="sizeChartModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="sizeChartModalLabel">
+                        <i class="fas fa-ruler"></i> Jersey Size Chart
+                    </h1>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center p-4">
+                    <img src="https://images.unsplash.com/photo-1434389677669-e08b4cac3105?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+                        alt="Size Chart" class="size-chart-image mb-4">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <h5 class="mb-3"><i class="fas fa-tshirt"></i> Size Measurements</h5>
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Size</th>
+                                            <th>Chest (inches)</th>
+                                            <th>Length (inches)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>M</strong></td>
+                                            <td>36-38"</td>
+                                            <td>27"</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>L</strong></td>
+                                            <td>40-42"</td>
+                                            <td>28"</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>XL</strong></td>
+                                            <td>44-46"</td>
+                                            <td>29"</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>XXL</strong></td>
+                                            <td>48-50"</td>
+                                            <td>30"</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>XXXL</strong></td>
+                                            <td>52-54"</td>
+                                            <td>31"</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <h5 class="mb-3"><i class="fas fa-info-circle"></i> Sizing Tips</h5>
+                            <ul class="text-start">
+                                <li>Measure your chest at the widest point</li>
+                                <li>For a regular fit, choose your exact size</li>
+                                <li>For a loose fit, go one size up</li>
+                                <li>All measurements are in inches</li>
+                                <li>Contact us if you need help choosing</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="container">
+                <div class="dept-info">
+                    <h2 class="dept-title">Institute of Computer Engineering</h2>
+                    <p class="dept-description">
+                        The Institute of Computer Engineering (ICE) stands as a beacon of technological innovation and
+                        academic excellence.
+                        Established with the vision of nurturing future tech leaders, ICE combines cutting-edge
+                        curriculum with hands-on
+                        practical experience.
+                    </p>
+
+                    <div class="dept-stats">
+                        <div class="stat-item">
+                            <div class="stat-number">500+</div>
+                            <div class="stat-label">Active Students</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">50+</div>
+                            <div class="stat-label">Expert Faculty</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">15+</div>
+                            <div class="stat-label">Research Labs</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">95%</div>
+                            <div class="stat-label">Job Placement</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="social-section">
+                    <h4 style="margin-bottom: 25px; font-family: 'Orbitron', monospace;">Connect With ICE</h4>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                    </div>
+                    <div class="copyright">
+                        <p>&copy; 2025 Institute of Computer Engineering (ICE). All Rights Reserved.</p>
+                        <p>Empowering Future Tech Leaders | Building Tomorrow's Digital World</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
