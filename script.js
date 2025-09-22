@@ -280,7 +280,7 @@ class ApiService {
     // Automatically detect environment and set base URL
     static baseUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
         ? 'http://localhost:3000/api'  // Local development
-        : '/api';  // Production (same domain)
+        : 'https://jersee-ice-backend.onrender.com/api';  // Production (same domain)
 
     static async makeRequest(endpoint, options = {}) {
         if (!NetworkMonitor.isOnline) {
@@ -570,7 +570,7 @@ class JerseyOrderApp {
             }
         }
     }
-    
+
 
     static async checkJerseyUniqueness() {
         const jerseyNumber = document.getElementById('jerseyNumber')?.value;
