@@ -738,3 +738,4 @@ window.addEventListener('unhandledrejection', (event) => {
     ErrorHandler.handleError(event.reason, 'promise');
     event.preventDefault();
 });
+
