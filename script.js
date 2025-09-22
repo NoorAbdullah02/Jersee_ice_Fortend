@@ -111,7 +111,7 @@ class FormValidator {
         jerseyNumber: (value) => {
             if (!value) return 'Jersey number is required';
             const num = parseInt(value);
-            if (isNaN(num) || num < 1 || num > 99) return 'Jersey number must be between 1 and 99';
+            if (isNaN(num) || num < 0 || num > 500) return 'Jersey number must be between 0 and 500';
             return null;
         },
         batch: (value) => {
