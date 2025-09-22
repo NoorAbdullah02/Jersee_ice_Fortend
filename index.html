@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" type="images/jepg" href="images/logo.jpeg">
+    <link rel="icon" type="images/jepg" href="images/depLogo.png">
 
 </head>
 
@@ -66,14 +66,8 @@
                 <h2 class="jersey-title">Official ICE Department Jersey</h2>
 
                 <div class="jersey-image-container">
-                    <img src="images/jersee.jpeg"
-                        alt="ICE Department Jersey" class="jersey-image">
+                    <img src="images/jersee.jpeg" alt="ICE Department Jersey" class="jersey-image">
                 </div>
-                
-                <!-- <div class="jersey-image-container">
-                    <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                        alt="ICE Department Jersey" class="jersey-image">
-                </div> -->
 
                 <!-- Dynamic Price Display -->
                 <div class="price-display" id="priceDisplay">
@@ -100,13 +94,14 @@
                     <!-- Name -->
                     <div class="col-lg-6 col-md-6" data-aos="fade-right" data-aos-delay="100">
                         <div class="form-group">
+                            <!-- MODIFY THIS LABEL TEXT -->
                             <label for="name" class="form-label">
                                 <i class="fas fa-user"></i> Full Name
                             </label>
                             <div class="position-relative">
                                 <input type="text" class="form-control" id="name" name="name"
                                     placeholder="Enter your full name" required>
-                                <div class="error-message" id="nameError">Please enter your full name</div>
+                                <div class="error-message" id="nameError">Please enter your JERSEY name</div>
                             </div>
                         </div>
                     </div>
@@ -114,13 +109,14 @@
                     <!-- Student ID -->
                     <div class="col-lg-6 col-md-6" data-aos="fade-left" data-aos-delay="100">
                         <div class="form-group">
+                            <!-- MODIFY THIS LABEL TEXT -->
                             <label for="studentId" class="form-label">
-                                <i class="fas fa-id-card"></i> Student ID
+                                <i class="fas fa-id-card"></i> ID Number
                             </label>
                             <div class="position-relative">
                                 <input type="text" class="form-control" id="studentId" name="studentId"
-                                    placeholder="Enter your student ID" required>
-                                <div class="error-message" id="studentIdError">Please enter your student ID</div>
+                                    placeholder="Enter your ID number" required>
+                                <div class="error-message" id="studentIdError">Please enter your ID number</div>
                             </div>
                         </div>
                     </div>
@@ -128,8 +124,9 @@
                     <!-- Jersey Number -->
                     <div class="col-lg-6 col-md-6" data-aos="fade-right" data-aos-delay="200">
                         <div class="form-group">
+                            <!-- MODIFY THIS LABEL TEXT -->
                             <label for="jerseyNumber" class="form-label">
-                                <i class="fas fa-hashtag"></i> Jersey Number
+                                <i class="fas fa-hashtag"></i> Preferred Number
                                 <div class="tooltip-container">
                                     <i class="fas fa-info-circle" style="cursor: help; margin-left: 5px;"></i>
                                     <span class="tooltip-text">Choose a unique number between 1-99</span>
@@ -147,8 +144,9 @@
                     <!-- Batch -->
                     <div class="col-lg-6 col-md-6" data-aos="fade-left" data-aos-delay="200">
                         <div class="form-group">
+                            <!-- MODIFY THIS LABEL TEXT -->
                             <label for="batch" class="form-label">
-                                <i class="fas fa-users"></i> Batch
+                                <i class="fas fa-users"></i> Academic Batch
                             </label>
                             <div class="position-relative">
                                 <select class="form-select" id="batch" name="batch" required>
@@ -172,8 +170,9 @@
                     <!-- Size -->
                     <div class="col-lg-6 col-md-6" data-aos="fade-right" data-aos-delay="300">
                         <div class="form-group">
+                            <!-- MODIFY THIS LABEL TEXT -->
                             <label for="size" class="form-label">
-                                <i class="fas fa-expand-arrows-alt"></i> Size
+                                <i class="fas fa-expand-arrows-alt"></i> Jersey Size
                                 <div class="tooltip-container">
                                     <i class="fas fa-info-circle" style="cursor: help; margin-left: 5px;"></i>
                                     <span class="tooltip-text">Check size chart for accurate measurements</span>
@@ -196,8 +195,9 @@
                     <!-- Transaction ID -->
                     <div class="col-lg-6 col-md-6" data-aos="fade-left" data-aos-delay="300">
                         <div class="form-group">
+                            <!-- MODIFY THIS LABEL TEXT -->
                             <label for="transactionId" class="form-label">
-                                <i class="fas fa-receipt"></i> Transaction ID
+                                <i class="fas fa-receipt"></i> Payment Reference
                                 <div class="tooltip-container">
                                     <i class="fas fa-info-circle" style="cursor: help; margin-left: 5px;"></i>
                                     <span class="tooltip-text">Transaction ID from your payment method</span>
@@ -214,8 +214,9 @@
                     <!-- Collar Type -->
                     <div class="col-lg-6 col-md-6" data-aos="fade-right" data-aos-delay="400">
                         <div class="form-group">
+                            <!-- MODIFY THIS LABEL TEXT -->
                             <label class="form-label">
-                                <i class="fas fa-circle-notch"></i> Collar Type
+                                <i class="fas fa-circle-notch"></i> Collar Style
                             </label>
                             <div class="radio-container">
                                 <div class="radio-option">
@@ -238,8 +239,9 @@
                     <!-- Sleeve Type -->
                     <div class="col-lg-6 col-md-6" data-aos="fade-left" data-aos-delay="400">
                         <div class="form-group">
+                            <!-- MODIFY THIS LABEL TEXT -->
                             <label class="form-label">
-                                <i class="fas fa-hand-paper"></i> Sleeve Type
+                                <i class="fas fa-hand-paper"></i> Sleeve Length
                             </label>
                             <div class="radio-container">
                                 <div class="radio-option">
@@ -262,8 +264,9 @@
                     <!-- Email -->
                     <div class="col-12" data-aos="fade-up" data-aos-delay="500">
                         <div class="form-group">
+                            <!-- MODIFY THIS LABEL TEXT -->
                             <label for="email" class="form-label">
-                                <i class="fas fa-envelope"></i> Email Address
+                                <i class="fas fa-envelope"></i> Contact Email
                             </label>
                             <div class="position-relative">
                                 <input type="email" class="form-control" id="email" name="email"
@@ -276,8 +279,9 @@
                     <!-- Additional Notes -->
                     <div class="col-12" data-aos="fade-up" data-aos-delay="600">
                         <div class="form-group">
+                            <!-- MODIFY THIS LABEL TEXT -->
                             <label for="notes" class="form-label">
-                                <i class="fas fa-sticky-note"></i> Special Instructions (Optional)
+                                <i class="fas fa-sticky-note"></i> Additional Comments (Optional)
                             </label>
                             <textarea class="form-control" id="notes" name="notes" rows="4"
                                 placeholder="Any special requirements, delivery instructions, or custom requests..."></textarea>
@@ -376,7 +380,7 @@
         </section>
     </div>
 
-    <!-- Size Chart Modal -->
+    <!-- Size Chart Modal - MODIFY THE MEASUREMENTS HERE -->
     <div class="modal fade" id="sizeChartModal" tabindex="-1" aria-labelledby="sizeChartModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content">
@@ -388,7 +392,7 @@
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body text-center p-4">
-                    <img src="https://images.unsplash.com/photo-1434389677669-e08b4cac3105?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+                    <img src="images/jersee.jpeg"
                         alt="Size Chart" class="size-chart-image mb-4">
                     <div class="row">
                         <div class="col-lg-6">
@@ -402,31 +406,32 @@
                                             <th>Length (inches)</th>
                                         </tr>
                                     </thead>
+                                    <!-- MODIFY THESE MEASUREMENTS -->
                                     <tbody>
                                         <tr>
                                             <td><strong>M</strong></td>
-                                            <td>36-38"</td>
-                                            <td>27"</td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>L</strong></td>
-                                            <td>40-42"</td>
+                                            <td>38-40"</td>
                                             <td>28"</td>
                                         </tr>
                                         <tr>
-                                            <td><strong>XL</strong></td>
-                                            <td>44-46"</td>
+                                            <td><strong>L</strong></td>
+                                            <td>42-44"</td>
                                             <td>29"</td>
                                         </tr>
                                         <tr>
-                                            <td><strong>XXL</strong></td>
-                                            <td>48-50"</td>
+                                            <td><strong>XL</strong></td>
+                                            <td>46-48"</td>
                                             <td>30"</td>
                                         </tr>
                                         <tr>
-                                            <td><strong>XXXL</strong></td>
-                                            <td>52-54"</td>
+                                            <td><strong>XXL</strong></td>
+                                            <td>50-52"</td>
                                             <td>31"</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>XXXL</strong></td>
+                                            <td>54-56"</td>
+                                            <td>32"</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -485,7 +490,7 @@
                 <div class="social-section">
                     <h4 style="margin-bottom: 25px; font-family: 'Orbitron', monospace;">Connect With ICE</h4>
                     <div class="social-links">
-                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.facebook.com/bauet.ice" class="social-link"><i class="fab fa-facebook-f"></i></a>
                         <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
                         <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
                         <a href="#" class="social-link"><i class="fab fa-github"></i></a>

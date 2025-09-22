@@ -104,8 +104,8 @@ class FormValidator {
             return null;
         },
         studentId: (value) => {
-            if (!value.trim()) return 'Student ID is required';
-            if (!/^\d+$/.test(value.trim())) return 'Student ID must contain only numbers';
+            if (!value.trim()) return 'Student ID / Teachres ID is required';
+            if (!/^\d+$/.test(value.trim())) return 'Student ID / Teachres ID must contain only numbers';
             return null;
         },
         jerseyNumber: (value) => {
@@ -337,6 +337,10 @@ class ApiService {
         return this.makeRequest(`/orders/check-jersey?number=${jerseyNumber}${batchParam}`);
     }
 
+    static async checkNameExists(name) {
+        return this.makeRequest(`/orders/check-name?name=${encodeURIComponent(name)}`);
+    }
+
     static async getOrderById(orderId) {
         return this.makeRequest(`/orders/${orderId}`);
     }
@@ -486,14 +490,17 @@ class JerseyOrderApp {
 
         // Jersey number uniqueness check
         const jerseyNumberInput = document.getElementById('jerseyNumber');
-        const batchInput = document.getElementById('batch');
-
+        
         if (jerseyNumberInput) {
             const debouncedCheck = this.debounce(this.checkJerseyUniqueness.bind(this), 500);
             jerseyNumberInput.addEventListener('input', debouncedCheck);
-            if (batchInput) {
-                batchInput.addEventListener('input', debouncedCheck);
-            }
+        }
+
+        // Name existence check
+        const nameInput = document.getElementById('name');
+        if (nameInput) {
+            const debouncedNameCheck = this.debounce(this.checkNameExists.bind(this), 500);
+            nameInput.addEventListener('input', debouncedNameCheck);
         }
 
         // Smooth scrolling
@@ -571,18 +578,38 @@ class JerseyOrderApp {
         }
     }
 
+    static async checkNameExists() {
+        const nameField = document.getElementById('name');
+        const name = nameField?.value?.trim();
+
+        if (!name || name.length < 2) return;
+
+        try {
+            const result = await ApiService.checkNameExists(name);
+            
+            if (result.exists) {
+                // Show warning but still allow submission
+                FormValidator.showFieldError('name', 'This name is already taken.');
+            } else {
+                FormValidator.showFieldSuccess('name');
+            }
+        } catch (error) {
+            console.warn('Name existence check failed:', error);
+            // Don't show error to user for this check, as it's optional
+        }
+    }
 
     static async checkJerseyUniqueness() {
         const jerseyNumber = document.getElementById('jerseyNumber')?.value;
-        const batch = document.getElementById('batch')?.value;
 
         if (!jerseyNumber) return;
 
         try {
-            const result = await ApiService.checkJerseyNumber(jerseyNumber, batch);
+            // Check jersey number regardless of batch - jersey numbers must be globally unique
+            const result = await ApiService.checkJerseyNumber(jerseyNumber, null);
 
             if (!result.available) {
-                FormValidator.showFieldError('jerseyNumber', `Jersey number ${jerseyNumber} is already taken${batch ? ` for batch ${batch}` : ''}`);
+                FormValidator.showFieldError('jerseyNumber', `This jersey number is already taken.`);
             } else {
                 FormValidator.showFieldSuccess('jerseyNumber');
             }
@@ -738,4 +765,3 @@ window.addEventListener('unhandledrejection', (event) => {
     ErrorHandler.handleError(event.reason, 'promise');
     event.preventDefault();
 });
-
