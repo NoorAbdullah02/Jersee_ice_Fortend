@@ -100,7 +100,7 @@ class FormValidator {
         name: (value) => {
             if (!value.trim()) return 'Name is required';
             if (value.trim().length < 2) return 'Name must be at least 2 characters';
-           // if (!/^[a-zA-Z\s]+$/.test(value)) return 'Name can only contain letters and spaces';
+            // if (!/^[a-zA-Z\s]+$/.test(value)) return 'Name can only contain letters and spaces';
             return null;
         },
         studentId: (value) => {
@@ -491,7 +491,7 @@ class JerseyOrderApp {
 
         // Jersey number uniqueness check
         const jerseyNumberInput = document.getElementById('jerseyNumber');
-        
+
         if (jerseyNumberInput) {
             const debouncedCheck = this.debounce(this.checkJerseyUniqueness.bind(this), 500);
             jerseyNumberInput.addEventListener('input', debouncedCheck);
@@ -587,7 +587,7 @@ class JerseyOrderApp {
 
         try {
             const result = await ApiService.checkNameExists(name);
-            
+
             if (result.exists) {
                 // Show warning but still allow submission
                 FormValidator.showFieldError('name', 'This name is already taken.');

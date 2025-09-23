@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin Dashboard • Jersey Orders</title>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Axios -->
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+  <style>
+    /* subtle card glow for desktop */
+    .glass {
+      background: rgba(255, 255, 255, 0.75);
+      -webkit-backdrop-filter: blur(6px);
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+    }
+
+    /* Loader styles */
+    .loader {
+      display: inline-block;
+      width: 2rem;
+      height: 2rem;
+      border: 3px solid rgba(147, 51, 234, 0.2);
+      border-radius: 50%;
+      border-top-color: #9333ea;
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* Show loading state */
+    .loading {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+  </style>
+</head>
+
+<body class="bg-gradient-to-br from-gray-100 to-gray-200 min-h-screen text-gray-800">
+
+  <!-- LOADING SPINNER (Hidden by default) -->
+  <div id="loadingOverlay" class="hidden fixed inset-0 bg-white bg-opacity-50 z-50 flex items-center justify-center">
+    <div class="flex flex-col items-center">
+      <div class="loader mb-4"></div>
+      <p class="text-gray-600">Loading...</p>
+    </div>
+  </div>
+
+  <!-- LOGIN -->
+  <main id="loginPage" class="min-h-screen flex items-center justify-center p-6">
+    <div class="w-full max-w-md glass rounded-2xl p-6 shadow-xl">
+      <h2 class="text-2xl font-bold text-indigo-700 mb-2">Admin Login</h2>
+      <p class="text-sm text-gray-600 mb-6">Sign in to manage jersey orders.</p>
+
+      <form id="loginForm" class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium mb-1">Username</label>
+          <input id="username" required class="w-full rounded-lg p-3 border focus:ring-2 focus:ring-indigo-400" />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium mb-1">Password</label>
+          <input id="password" type="password" required
+            class="w-full rounded-lg p-3 border focus:ring-2 focus:ring-indigo-400" />
+        </div>
+
+        <div>
+          <button type="submit"
+            class="w-full bg-indigo-600 text-white p-3 rounded-lg font-semibold hover:bg-indigo-700 transition">
+            Sign in
+          </button>
+        </div>
+
+        <p id="loginError" class="text-sm text-red-600 mt-1 hidden"></p>
+      </form>
+    </div>
+  </main>
+
+  <!-- DASHBOARD -->
+  <div id="dashboardPage" class="hidden min-h-screen flex flex-col">
+    <!-- NAV -->
+    <nav
+      class="flex items-center justify-between px-5 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg">
+      <div class="flex items-center gap-3">
+        <div class="rounded-full bg-white/20 p-2">
+          <!-- small logo -->
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" class="text-white">
+            <path d="M3 12h18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path>
+            <path d="M6 7h12M6 17h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path>
+          </svg>
+        </div>
+        <h1 class="text-lg font-semibold">Jersey Admin Dashboard</h1>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <button id="refreshBtn" title="Refresh" class="bg-white/20 hover:bg-white/30 p-2 rounded-md">
+          <!-- refresh -->
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+            stroke-width="1.6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v6h6M20 20v-6h-6" />
+          </svg>
+        </button>
+        <button id="logoutBtn" class="bg-red-500 hover:bg-red-600 px-3 py-2 rounded-md font-medium">Logout</button>
+      </div>
+    </nav>
+
+    <!-- CONTENT -->
+    <section class="p-4 md:p-6 space-y-6 flex-1">
+      <!-- Stats grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="glass rounded-xl p-4 flex items-center justify-between">
+          <div>
+            <p class="text-xs text-gray-600">Total Orders</p>
+            <p id="statTotalOrders" class="text-2xl font-bold text-indigo-600">0</p>
+          </div>
+          <div class="text-indigo-200 text-sm">📦</div>
+        </div>
+
+        <div class="glass rounded-xl p-4 flex items-center justify-between">
+          <div>
+            <p class="text-xs text-gray-600">Pending</p>
+            <p id="statPending" class="text-2xl font-bold text-yellow-600">0</p>
+          </div>
+          <div class="text-yellow-300 text-sm">⏳</div>
+        </div>
+
+        <div class="glass rounded-xl p-4 flex items-center justify-between">
+          <div>
+            <p class="text-xs text-gray-600">Done</p>
+            <p id="statDone" class="text-2xl font-bold text-green-600">0</p>
+          </div>
+          <div class="text-green-300 text-sm">✅</div>
+        </div>
+
+        <div class="glass rounded-xl p-4 flex items-center justify-between">
+          <div>
+            <p class="text-xs text-gray-600">Revenue (৳)</p>
+            <p id="statRevenue" class="text-2xl font-bold text-purple-600">0</p>
+          </div>
+          <div class="text-purple-300 text-sm">৳</div>
+        </div>
+      </div>
+
+      <!-- Controls: search + filters -->
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+        <div class="flex gap-2 w-full md:w-2/3">
+          <input id="searchInput" type="search" placeholder="Search by name, student ID, jersey #"
+            class="w-full p-3 rounded-lg border focus:ring-2 focus:ring-indigo-400" />
+          <button id="searchBtn" class="bg-indigo-600 text-white px-4 rounded-lg hover:bg-indigo-700">Search</button>
+        </div>
+
+        <div class="flex gap-2 items-center">
+          <select id="statusFilter" class="p-3 rounded-lg border">
+            <option value="">All statuses</option>
+            <option value="pending">Pending</option>
+            <option value="done">Done</option>
+          </select>
+          <button id="clearFilterBtn" class="px-3 py-2 border rounded-lg">Clear</button>
+        </div>
+      </div>
+
+      <!-- ORDERS: table for md+, cards for mobile -->
+      <div class="space-y-4">
+        <!-- desktop/table -->
+        <div class="hidden md:block">
+          <div class="glass rounded-xl p-4 shadow overflow-x-auto">
+            <table class="w-full table-auto">
+              <thead>
+                <tr class="text-left text-sm text-gray-600">
+                  <th class="p-3">ID</th>
+                  <th class="p-3">Name</th>
+                  <th class="p-3">Jersey #</th>
+                  <th class="p-3">Batch</th>
+                  <th class="p-3">Size</th>
+                  <th class="p-3">Status</th>
+                  <th class="p-3 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="ordersTable" class="divide-y"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- mobile list -->
+        <div class="md:hidden">
+          <div id="ordersListMobile" class="space-y-3"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // ======= CONFIG =======
+    // Change this to your backend URL for production or local testing
+    // Example for local backend: "http://localhost:3000/api"
+    //const API_BASE = "http://localhost:3000/api"
+    const API_BASE = 'https://jersee-ice-backend.onrender.com/api'
+    // ======================
+
+    let token = localStorage.getItem("adminToken") || "";
+    const loginPage = document.getElementById('loginPage');
+    const dashboardPage = document.getElementById('dashboardPage');
+    const loadingOverlay = document.getElementById('loadingOverlay');
+
+    // UI elements
+    const loginForm = document.getElementById('loginForm');
+    const loginError = document.getElementById('loginError');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const refreshBtn = document.getElementById('refreshBtn');
+
+    const statTotalOrders = document.getElementById('statTotalOrders');
+    const statPending = document.getElementById('statPending');
+    const statDone = document.getElementById('statDone');
+    const statRevenue = document.getElementById('statRevenue');
+
+    const ordersTable = document.getElementById('ordersTable');
+    const ordersListMobile = document.getElementById('ordersListMobile');
+
+    const searchInput = document.getElementById('searchInput');
+    const searchBtn = document.getElementById('searchBtn');
+    const statusFilter = document.getElementById('statusFilter');
+    const clearFilterBtn = document.getElementById('clearFilterBtn');
+
+    // Show loading spinner
+    function showLoading() {
+      loadingOverlay.classList.remove('hidden');
+    }
+
+    // Hide loading spinner
+    function hideLoading() {
+      loadingOverlay.classList.add('hidden');
+    }
+
+    // Init
+    if (token) {
+      showDashboard();
+    } else {
+      showLogin();
+    }
+
+    // ========== AUTH ==========
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      showLoading();
+      loginError.classList.add('hidden');
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
+      try {
+        const res = await axios.post(`${API_BASE}/admin/login`, { username, password });
+        token = res.data.token;
+        localStorage.setItem('adminToken', token);
+        showDashboard();
+      } catch (err) {
+        console.error(err);
+        loginError.textContent = err.response?.data?.error || 'Login failed';
+        loginError.classList.remove('hidden');
+      } finally {
+        hideLoading();
+      }
+    });
+
+    logoutBtn.addEventListener('click', () => {
+      token = "";
+      localStorage.removeItem('adminToken');
+      showLogin();
+    });
+
+    refreshBtn.addEventListener('click', () => {
+      showLoading();
+      loadStats();
+      loadOrders();
+    });
+
+    searchBtn.addEventListener('click', () => {
+      showLoading();
+      loadOrders();
+    });
+
+    clearFilterBtn.addEventListener('click', () => {
+      searchInput.value = '';
+      statusFilter.value = '';
+      showLoading();
+      loadOrders();
+    });
+
+    // ========== VIEW HELPERS ==========
+    function showDashboard() {
+      loginPage.classList.add('hidden');
+      dashboardPage.classList.remove('hidden');
+      loadStats();
+      loadOrders();
+    }
+
+    function showLogin() {
+      loginPage.classList.remove('hidden');
+      dashboardPage.classList.add('hidden');
+    }
+
+    // ========== DATA LOAD ==========
+    async function loadStats() {
+      if (!token) return;
+      try {
+        const res = await axios.get(`${API_BASE}/admin/stats`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const s = res.data.stats || {};
+
+        // Fallbacks to handle different shapes
+        const total = s.totalOrders ?? s.total ?? 0;
+        const pending = s.ordersByStatus?.pending ?? s.pendingOrders ?? s.pending ?? 0;
+        const done = s.ordersByStatus?.done ?? s.completedOrders ?? s.done ?? 0;
+        const revenue = s.totalRevenue ?? s.revenue ?? 0;
+
+        statTotalOrders.textContent = Number(total).toLocaleString();
+        statPending.textContent = Number(pending).toLocaleString();
+        statDone.textContent = Number(done).toLocaleString();
+        statRevenue.textContent = Number(revenue).toLocaleString();
+      } catch (err) {
+        console.error('loadStats error', err);
+        // If token invalid, force login
+        if (err.response?.status === 401 || err.response?.status === 403) {
+          token = "";
+          localStorage.removeItem('adminToken');
+          showLogin();
+        }
+      }
+    }
+
+    async function loadOrders() {
+      if (!token) return;
+      try {
+        // Build query (search + status)
+        const q = [];
+        const search = searchInput.value.trim();
+        if (search) q.push(`search=${encodeURIComponent(search)}`);
+        if (statusFilter.value) q.push(`status=${encodeURIComponent(statusFilter.value)}`);
+        const queryString = q.length ? `?${q.join('&')}` : '';
+
+        const res = await axios.get(`${API_BASE}/admin/orders${queryString}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        const orders = res.data.orders || [];
+        renderTable(orders);
+        renderMobileList(orders);
+      } catch (err) {
+        console.error('loadOrders error', err);
+        if (err.response?.status === 401 || err.response?.status === 403) {
+          token = "";
+          localStorage.removeItem('adminToken');
+          showLogin();
+        }
+      } finally {
+        hideLoading();
+      }
+    }
+
+    // ========== RENDER ==========
+    function renderTable(orders) {
+      ordersTable.innerHTML = '';
+      if (!orders.length) {
+        ordersTable.innerHTML = `<tr><td colspan="7" class="p-4 text-center text-gray-500">No orders found</td></tr>`;
+        return;
+      }
+
+      orders.forEach(o => {
+        // handle snake_case or camelCase
+        const jersey = o.jerseyNumber ?? o.jersey_number ?? '-';
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-gray-50 transition';
+        tr.innerHTML = `
+          <td class="p-3 align-top">${o.id}</td>
+          <td class="p-3 align-top">
+            <div class="font-medium">${escapeHtml(o.name)}</div>
+            <div class="text-xs text-gray-500">${escapeHtml(o.student_id ?? o.studentId ?? '')}</div>
+          </td>
+          <td class="p-3 align-top">${escapeHtml(String(jersey))}</td>
+          <td class="p-3 align-top">${escapeHtml(o.batch ?? '-')}</td>
+          <td class="p-3 align-top">${escapeHtml(o.size ?? '-')}</td>
+          <td class="p-3 align-top">
+            <span class="px-2 py-1 rounded-full text-xs font-semibold ${o.status === 'done' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}">
+              ${escapeHtml(o.status ?? '-')}
+            </span>
+          </td>
+          <td class="p-3 align-top text-right">
+            <div class="inline-flex gap-2">
+              <button class="px-3 py-1 rounded-md bg-green-600 text-white text-sm" onclick="markAsStatus(${o.id}, 'done')">✔ Done</button>
+              <button class="px-3 py-1 rounded-md bg-yellow-500 text-white text-sm" onclick="markAsStatus(${o.id}, 'pending')">⏳ Pending</button>
+              <button class="px-3 py-1 rounded-md bg-red-500 text-white text-sm" onclick="deleteOrder(${o.id})">🗑 Delete</button>
+            </div>
+          </td>
+        `;
+        ordersTable.appendChild(tr);
+      });
+    }
+
+    function renderMobileList(orders) {
+      ordersListMobile.innerHTML = '';
+      if (!orders.length) {
+        ordersListMobile.innerHTML = `<div class="glass p-4 rounded-lg text-center text-gray-500">No orders found</div>`;
+        return;
+      }
+
+      orders.forEach(o => {
+        const jersey = o.jerseyNumber ?? o.jersey_number ?? '-';
+        const card = document.createElement('div');
+        card.className = 'glass p-4 rounded-lg shadow flex flex-col gap-2';
+        card.innerHTML = `
+          <div class="flex justify-between items-start">
+            <div>
+              <div class="text-sm text-gray-600">#${o.id} • ${escapeHtml(o.name)}</div>
+              <div class="text-xs text-gray-500">${escapeHtml(o.student_id ?? o.studentId ?? '')}</div>
+            </div>
+            <div class="text-right">
+              <div class="text-lg font-bold">${escapeHtml(String(jersey))}</div>
+              <div class="${o.status === 'done' ? 'text-green-600' : 'text-yellow-600'} text-sm font-semibold">${escapeHtml(o.status ?? '')}</div>
+            </div>
+          </div>
+
+          <div class="flex gap-2 flex-wrap items-center">
+            <div class="text-xs text-gray-500">Batch: <span class="font-medium text-gray-800">${escapeHtml(o.batch ?? '-')}</span></div>
+            <div class="text-xs text-gray-500">Size: <span class="font-medium text-gray-800">${escapeHtml(o.size ?? '-')}</span></div>
+            <div class="text-xs text-gray-500">Price: <span class="font-medium text-gray-800">৳${escapeHtml(String(o.final_price ?? o.finalPrice ?? '-'))}</span></div>
+          </div>
+
+          <div class="flex gap-2">
+            <button class="flex-1 px-3 py-2 rounded-md bg-green-600 text-white text-sm" onclick="markAsStatus(${o.id}, 'done')">✔ Done</button>
+            <button class="flex-1 px-3 py-2 rounded-md bg-yellow-500 text-white text-sm" onclick="markAsStatus(${o.id}, 'pending')">⏳ Pending</button>
+            <button class="flex-1 px-3 py-2 rounded-md bg-red-500 text-white text-sm" onclick="deleteOrder(${o.id})">🗑 Delete</button>
+          </div>
+        `;
+        ordersListMobile.appendChild(card);
+      });
+    }
+
+    // ========== ACTIONS ==========
+    async function markAsStatus(id, status) {
+      if (!confirm(`Change status to "${status}"?`)) return;
+      showLoading();
+      try {
+        await axios.patch(`${API_BASE}/admin/orders/${id}/status`, { status }, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        await loadStats();
+        await loadOrders();
+      } catch (err) {
+        console.error('markAsStatus error', err);
+        alert('Failed to update status');
+      } finally {
+        hideLoading();
+      }
+    }
+
+    async function deleteOrder(id) {
+      if (!confirm('Delete this order? This action cannot be undone.')) return;
+      showLoading();
+      try {
+        await axios.delete(`${API_BASE}/admin/orders/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        await loadStats();
+        await loadOrders();
+      } catch (err) {
+        console.error('deleteOrder error', err);
+        alert('Failed to delete order');
+      } finally {
+        hideLoading();
+      }
+    }
+
+    // Helper to escape user-provided values in HTML
+    function escapeHtml(str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '<')
+        .replace(/>/g, '>')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    // Optional: small initial delay to allow token recognition
+    (function init() {
+      // attempt to validate token by calling /admin/verify
+      if (!token) return;
+      showLoading();
+      axios.get(`${API_BASE}/admin/verify`, {
+        headers: { Authorization: `Bearer ${token}` },
+      }).then(() => {
+        hideLoading();
+        showDashboard();
+      }).catch(() => {
+        hideLoading();
+        token = '';
+        localStorage.removeItem('adminToken');
+        showLogin();
+      });
+    })();
+
+  </script>
+</body>
+
+</html>
