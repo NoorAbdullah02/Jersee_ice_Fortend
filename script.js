@@ -590,7 +590,7 @@ class JerseyOrderApp {
 
             if (result.exists) {
                 // Show warning but still allow submission
-                FormValidator.showFieldError('name', 'This name is already taken.');
+                FormValidator.showFieldError('name', 'This jersey name is already taken, but you can still use it without any problem.');
             } else {
                 FormValidator.showFieldSuccess('name');
             }
