@@ -403,12 +403,49 @@ class PriceCalculator {
 }
 
 // Enhanced success message handler for better user feedback
+
+
+// class SuccessHandler {
+//     static showOrderSuccess(result) {
+//         // Update order ID in success message
+//         const orderIdEl = document.getElementById('orderId');
+//         if (orderIdEl) {
+//             orderIdEl.textContent = result.orderId || Date.now().toString().slice(-6);
+//         }
+
+//         // Show success message with additional details
+//         const successMessage = document.getElementById('success-message');
+//         const successText = successMessage.querySelector('p');
+
+//         if (successText) {
+//             successText.innerHTML = `
+//                 Your jersey order has been received successfully!
+//                 <br><br>
+//                 <strong>What happens next:</strong><br>
+//                 • Confirmation email sent to your email address<br>
+//                 • Admin notification sent for processing<br>
+//                 • Payment verification (1-2 business days)<br>
+//                 • Order confirmation (2-3 business days)<br>
+//                 • Production and delivery (7-10 business days)<br>
+//                 <br>
+//                 <small><strong>Order ID:</strong> ${result.orderId || 'ICE-' + Date.now().toString().slice(-6)}</small>
+//             `;
+//         }
+
+//         ErrorHandler.showMessage('success', 'Order Placed Successfully!', '', 0);
+//     }
+// }
+
 class SuccessHandler {
     static showOrderSuccess(result) {
-        // Update order ID in success message
+        // Generate orderId (3-digit fallback with ICE- prefix)
+        const fallbackId = 'ICE-' + Date.now().toString().slice(-3).padStart(3, '0');
+        const orderId = result.orderId || fallbackId;
+
+        // Update order ID in success message element
         const orderIdEl = document.getElementById('orderId');
         if (orderIdEl) {
-            orderIdEl.textContent = result.orderId || Date.now().toString().slice(-6);
+            orderIdEl.textContent = orderId;
         }
 
         // Show success message with additional details
@@ -426,13 +463,14 @@ class SuccessHandler {
                 • Order confirmation (2-3 business days)<br>
                 • Production and delivery (7-10 business days)<br>
                 <br>
-                <small><strong>Order ID:</strong> ${result.orderId || 'ICE-' + Date.now().toString().slice(-6)}</small>
+                <small><strong>Order ID:</strong> ${orderId}</small>
             `;
         }
 
         ErrorHandler.showMessage('success', 'Order Placed Successfully!', '', 0);
     }
 }
+
 
 // Main Application
 class JerseyOrderApp {
