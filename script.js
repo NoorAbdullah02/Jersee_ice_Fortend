@@ -367,7 +367,7 @@ class PriceCalculator {
     static prices = {
         'round-half': 400,
         'round-full': 500,
-        'polo-half': 350,
+        'polo-half': 360,
         'polo-full': 400
     };
 
