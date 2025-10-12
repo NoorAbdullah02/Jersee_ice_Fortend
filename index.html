@@ -66,12 +66,12 @@
                 <h2 class="jersey-title">Official ICE Department Jersey</h2>
 
                 <div class="jersey-image-container">
-                    <img src="images/jersee.jpeg" alt="ICE Department Jersey" class="jersey-image">
+                    <img src="images/ice_jersee.png" alt="ICE Department Jersey" class="jersey-image">
                 </div>
 
                 <!-- Dynamic Price Display -->
                 <div class="price-display" id="priceDisplay">
-                    <div class="price-text" id="priceText">৳400</div>
+                    <div class="price-text" id="priceText">৳350</div>
                     <div class="price-label">Starting Price</div>
                 </div>
 
@@ -112,7 +112,7 @@
                         <div class="form-group">
                             <!-- MODIFY THIS LABEL TEXT -->
                             <label for="studentId" class="form-label">
-                                <i class="fas fa-id-card"></i> ID Number
+                                <i class="fas fa-id-card"></i> ID Number (Last 4 digits)
                             </label>
                             <div class="position-relative">
                                 <input type="text" class="form-control" id="studentId" name="studentId"
@@ -148,21 +148,18 @@
                         <div class="form-group">
                             <!-- MODIFY THIS LABEL TEXT -->
                             <label for="batch" class="form-label">
-                                <i class="fas fa-users"></i> Academic Batch
+                                <i class="fas fa-users"></i> Academic Batch (For Students Only)
                             </label>
                             <div class="position-relative">
                                 <select class="form-select" id="batch" name="batch" required>
                                     <option value="">Select your batch</option>
-                                    <option value="11th">11th Batch</option>
+                                    <option value="12th">12th Batch</option>
                                     <option value="13th">13th Batch</option>
                                     <option value="14th">14th Batch</option>
                                     <option value="15th">15th Batch</option>
                                     <option value="16th">16th Batch</option>
                                     <option value="17th">17th Batch</option>
                                     <option value="18th">18th Batch</option>
-                                    <option value="19th">19th Batch</option>
-                                    <option value="20th">20th Batch</option>
-                                    <option value="21th">21th Batch</option>
                                 </select>
                                 <div class="error-message" id="batchError">Please select your batch</div>
                             </div>
@@ -183,6 +180,7 @@
                             <div class="position-relative">
                                 <select class="form-select" id="size" name="size" required>
                                     <option value="">Choose your size</option>
+                                    <option value="S">S (Small)</option>
                                     <option value="M">M (Medium)</option>
                                     <option value="L">L (Large)</option>
                                     <option value="XL">XL (Extra Large)</option>
@@ -214,12 +212,14 @@
                     </div>
 
                     <!-- Collar Type -->
-                    <div class="col-lg-6 col-md-6" data-aos="fade-right" data-aos-delay="400">
+                    <!-- <div class="col-lg-6 col-md-6" data-aos="fade-right" data-aos-delay="400">
                         <div class="form-group">
-                            <!-- MODIFY THIS LABEL TEXT -->
+                           
+
                             <label class="form-label">
                                 <i class="fas fa-circle-notch"></i> Collar Style
                             </label>
+                            
                             <div class="radio-container">
                                 <div class="radio-option">
                                     <input type="radio" id="roundCollar" name="collarType" value="round" required>
@@ -227,6 +227,40 @@
                                         <i class="fas fa-circle"></i><br>Round Collar
                                     </label>
                                 </div>
+
+                                <div class="radio-option">
+                                    <input type="radio" id="poloCollar" name="collarType" value="polo" required>
+                                    <label for="poloCollar">
+                                        <i class="fas fa-square"></i><br>Polo Collar
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="error-message" id="collarTypeError">Please select collar type</div>
+                        </div>
+                    </div> -->
+
+
+
+
+                    <!-- only for round collar -->
+
+                    <!-- Collar Type -->
+                    <div class="col-lg-6 col-md-6" data-aos="fade-right" data-aos-delay="400">
+                        <div class="form-group">
+                            <!-- MODIFY THIS LABEL TEXT -->
+                            <label class="form-label">
+                                <i class="fas fa-circle-notch"></i> Collar Style
+                            </label>
+                            
+                            <div class="radio-container">
+                                <!-- COMMENTED OUT: Round Collar Option (Uncomment when needed) -->
+                                <!-- <div class="radio-option">
+                                    <input type="radio" id="roundCollar" name="collarType" value="round" required>
+                                    <label for="roundCollar">
+                                        <i class="fas fa-circle"></i><br>Round Collar
+                                    </label>
+                                </div> -->
+
                                 <div class="radio-option">
                                     <input type="radio" id="poloCollar" name="collarType" value="polo" required>
                                     <label for="poloCollar">
@@ -237,6 +271,11 @@
                             <div class="error-message" id="collarTypeError">Please select collar type</div>
                         </div>
                     </div>
+
+
+
+
+
 
                     <!-- Sleeve Type -->
                     <div class="col-lg-6 col-md-6" data-aos="fade-left" data-aos-delay="400">
@@ -323,10 +362,10 @@
                         <div class="mt-4">
                             <h6><i class="fas fa-info-circle"></i> Pricing Structure:</h6>
                             <ul style="text-align: left; max-width: 400px; margin: 0 auto;">
-                                <li><strong>Round Collar + Half Sleeve:</strong> ৳400</li>
-                                <li><strong>Round Collar + Full Sleeve:</strong> ৳500</li>
-                                <li><strong>Polo Collar + Half Sleeve:</strong> ৳600</li>
-                                <li><strong>Polo Collar + Full Sleeve:</strong> ৳700</li>
+                                <!-- <li><strong>Round Collar + Half Sleeve:</strong> ৳400</li>
+                                <li><strong>Round Collar + Full Sleeve:</strong> ৳500</li> -->
+                                <li><strong>Polo Collar + Half Sleeve:</strong> ৳350</li>
+                                <li><strong>Polo Collar + Full Sleeve:</strong> ৳400</li>
                             </ul>
                         </div>
                     </div>
@@ -394,7 +433,7 @@
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body text-center p-4">
-                    <img src="images/jersee.jpeg" alt="Size Chart" class="size-chart-image mb-4">
+                    <img src="images/ice_jersee.png" alt="Size Chart" class="size-chart-image mb-4">
                     <div class="row">
                         <div class="col-lg-6">
                             <h5 class="mb-3"><i class="fas fa-tshirt"></i> Size Measurements</h5>
@@ -410,29 +449,34 @@
                                     <!-- MODIFY THESE MEASUREMENTS -->
                                     <tbody>
                                         <tr>
+                                            <td><strong>S</strong></td>
+                                            <td>36</td>
+                                            <td>26</td>
+                                        </tr>
+                                        <tr>
                                             <td><strong>M</strong></td>
-                                            <td>38-40"</td>
-                                            <td>28"</td>
+                                            <td>38</td>
+                                            <td>27</td>
                                         </tr>
                                         <tr>
                                             <td><strong>L</strong></td>
-                                            <td>42-44"</td>
-                                            <td>29"</td>
+                                            <td>40</td>
+                                            <td>28</td>
                                         </tr>
                                         <tr>
                                             <td><strong>XL</strong></td>
-                                            <td>46-48"</td>
-                                            <td>30"</td>
+                                            <td>42</td>
+                                            <td>29</td>
                                         </tr>
                                         <tr>
                                             <td><strong>XXL</strong></td>
-                                            <td>50-52"</td>
-                                            <td>31"</td>
+                                            <td>44</td>
+                                            <td>30</td>
                                         </tr>
                                         <tr>
                                             <td><strong>XXXL</strong></td>
-                                            <td>54-56"</td>
-                                            <td>32"</td>
+                                            <td>46</td>
+                                            <td>31</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -446,6 +490,7 @@
                                 <li>For a loose fit, go one size up</li>
                                 <li>All measurements are in inches</li>
                                 <li>Contact us if you need help choosing</li>
+                                <li>Measurement may vary 1 to 2 cm</li>
                             </ul>
                         </div>
                     </div>

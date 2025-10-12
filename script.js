@@ -367,8 +367,8 @@ class PriceCalculator {
     static prices = {
         'round-half': 400,
         'round-full': 500,
-        'polo-half': 600,
-        'polo-full': 700
+        'polo-half': 350,
+        'polo-full': 400
     };
 
     static calculatePrice(collarType, sleeveType) {
