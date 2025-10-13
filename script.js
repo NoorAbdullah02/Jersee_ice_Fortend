@@ -610,7 +610,7 @@ class JerseyOrderApp {
             const result = await ApiService.checkJerseyNumber(jerseyNumber, null);
 
             if (!result.available) {
-                FormValidator.showFieldError('jerseyNumber', `This jersey number is already taken.`);
+                FormValidator.showFieldError('jerseyNumber', `This jersey number is already taken, but you can still use it without any problem.`);
             } else {
                 FormValidator.showFieldSuccess('jerseyNumber');
             }
