@@ -1,4 +1,6 @@
-// Enhanced Error Handling System
+// ============================================
+// ENHANCED ERROR HANDLING SYSTEM
+// ============================================
 class ErrorHandler {
     static lastRequest = null;
     static retryCount = 0;
@@ -12,7 +14,6 @@ class ErrorHandler {
         if (titleEl) titleEl.textContent = title;
         if (textEl) textEl.textContent = message;
 
-        // Hide all other messages
         ['success', 'error', 'warning', 'info'].forEach(t => {
             if (t !== type) {
                 document.getElementById(`${t}-message`).style.display = 'none';
@@ -61,7 +62,6 @@ class ErrorHandler {
             title = 'Request Failed';
         }
 
-        // Special handling for email service errors
         if (context === 'form-submission' && error.message.includes('email')) {
             message = 'Your order was submitted but there was an issue sending the confirmation email. Please contact support if needed.';
             title = 'Partial Success';
@@ -94,18 +94,19 @@ class ErrorHandler {
     }
 }
 
-// Form Validation System
+// ============================================
+// FORM VALIDATION SYSTEM
+// ============================================
 class FormValidator {
     static validators = {
         name: (value) => {
             if (!value.trim()) return 'Name is required';
             if (value.trim().length < 2) return 'Name must be at least 2 characters';
-            // if (!/^[a-zA-Z\s]+$/.test(value)) return 'Name can only contain letters and spaces';
             return null;
         },
         studentId: (value) => {
-            if (!value.trim()) return 'Student ID / Teachres ID is required';
-            if (!/^\d+$/.test(value.trim())) return 'Student ID / Teachres ID must contain only numbers';
+            if (!value.trim()) return 'Student ID / Teacher ID is required';
+            if (!/^\d+$/.test(value.trim())) return 'Student ID / Teacher ID must contain only numbers';
             return null;
         },
         jerseyNumber: (value) => {
@@ -115,8 +116,7 @@ class FormValidator {
             return null;
         },
         batch: (value) => {
-            // Batch is optional - no validation needed
-            return null;
+            return null; // Optional field
         },
         size: (value) => {
             if (!value) return 'Please select a size';
@@ -129,8 +129,7 @@ class FormValidator {
             return null;
         },
         transactionId: (value) => {
-            // Transaction ID is optional - no validation needed
-            return null;
+            return null; // Optional field
         },
         collarType: (value) => {
             if (!value) return 'Please select collar type';
@@ -174,7 +173,6 @@ class FormValidator {
             errorEl.textContent = message;
             errorEl.style.display = 'block';
 
-            // Remove success icon, add error icon
             const existing = field.parentElement.querySelector('.success-icon, .error-icon');
             if (existing) existing.remove();
 
@@ -193,7 +191,6 @@ class FormValidator {
             field.classList.remove('error');
             errorEl.style.display = 'none';
 
-            // Remove error icon, add success icon
             const existing = field.parentElement.querySelector('.success-icon, .error-icon');
             if (existing) existing.remove();
 
@@ -217,7 +214,9 @@ class FormValidator {
     }
 }
 
-// Network Status Monitor
+// ============================================
+// NETWORK STATUS MONITOR
+// ============================================
 class NetworkMonitor {
     static isOnline = navigator.onLine;
     static statusEl = document.getElementById('networkStatus');
@@ -256,7 +255,9 @@ class NetworkMonitor {
     }
 }
 
-// Loading Manager
+// ============================================
+// LOADING MANAGER
+// ============================================
 class LoadingManager {
     static overlay = document.getElementById('loadingOverlay');
 
@@ -275,12 +276,13 @@ class LoadingManager {
     }
 }
 
-// Updated API Service for Backend Integration
+// ============================================
+// API SERVICE
+// ============================================
 class ApiService {
-    // Automatically detect environment and set base URL
     static baseUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-        ? 'http://localhost:3000/api'  // Local development
-        : 'https://jersee-ice-backend.onrender.com/api';  // Production (same domain)
+        ? 'http://localhost:3000/api'
+        : 'https://jersee-ice-backend.onrender.com/api';
 
     static async makeRequest(endpoint, options = {}) {
         if (!NetworkMonitor.isOnline) {
@@ -303,12 +305,10 @@ class ApiService {
                 const error = new Error(`HTTP ${response.status}`);
                 error.status = response.status;
 
-                // Try to get error message from response
                 try {
                     const errorData = await response.json();
                     error.message = errorData.error || errorData.message || error.message;
                 } catch (e) {
-                    // If response is not JSON, use status text
                     error.message = response.statusText || error.message;
                 }
 
@@ -324,7 +324,6 @@ class ApiService {
             throw error;
         }
     }
-
 
     static async submitOrder(orderData) {
         return this.makeRequest('/orders', {
@@ -362,7 +361,9 @@ class ApiService {
     }
 }
 
-// Price Calculator
+// ============================================
+// PRICE CALCULATOR
+// ============================================
 class PriceCalculator {
     static prices = {
         'round-half': 400,
@@ -390,7 +391,6 @@ class PriceCalculator {
         if (priceText) priceText.textContent = `৳${price}`;
         if (displayPrice) displayPrice.textContent = `৳${price}`;
 
-        // Add animation
         if (priceDisplay) {
             priceDisplay.style.transform = 'scale(1.1)';
             setTimeout(() => {
@@ -402,16 +402,16 @@ class PriceCalculator {
     }
 }
 
-// Enhanced success message handler for better user feedback
+// ============================================
+// SUCCESS HANDLER
+// ============================================
 class SuccessHandler {
     static showOrderSuccess(result) {
-        // Update order ID in success message
         const orderIdEl = document.getElementById('orderId');
         if (orderIdEl) {
             orderIdEl.textContent = result.orderId || Date.now().toString().slice(-6);
         }
 
-        // Show success message with additional details
         const successMessage = document.getElementById('success-message');
         const successText = successMessage.querySelector('p');
 
@@ -434,19 +434,27 @@ class SuccessHandler {
     }
 }
 
-// Main Application
+// ============================================
+// MAIN APPLICATION - OPTIMIZED FOR MOBILE
+// ============================================
 class JerseyOrderApp {
     static async init() {
-        // Initialize all systems
+        // Initialize AOS with mobile optimization
         if (typeof AOS !== 'undefined') {
-            AOS.init({ duration: 1000, once: true, offset: 100 });
+            const isMobile = window.innerWidth <= 768;
+            AOS.init({ 
+                duration: isMobile ? 500 : 1000,
+                once: true, 
+                offset: isMobile ? 50 : 100,
+                disable: window.innerWidth < 480
+            });
         }
+        
         NetworkMonitor.init();
         this.createParticles();
         this.bindEvents();
         this.setupRealTimeValidation();
 
-        // Test backend connection on startup
         try {
             await ApiService.healthCheck();
             console.log('Jersey Order App initialized successfully - Backend connected');
@@ -460,8 +468,25 @@ class JerseyOrderApp {
         const particles = document.querySelector('.particles');
         if (!particles) return;
 
+        // OPTIMIZED: Detect device and adjust particle count
+        const isMobile = window.innerWidth <= 768;
+        const isLowEnd = navigator.hardwareConcurrency <= 4 || window.innerWidth <= 480;
+        
+        let particleCount;
+        if (isLowEnd) {
+            particleCount = 0;
+        } else if (isMobile) {
+            particleCount = 15;
+        } else {
+            particleCount = 40;
+        }
+
+        if (particleCount === 0) {
+            particles.style.display = 'none';
+            return;
+        }
+
         const particleTypes = ['particle-1', 'particle-2', 'particle-3'];
-        const particleCount = 60;
 
         for (let i = 0; i < particleCount; i++) {
             const particle = document.createElement('div');
@@ -475,13 +500,11 @@ class JerseyOrderApp {
     }
 
     static bindEvents() {
-        // Form submission
         const form = document.getElementById('jersey-order-form');
         if (form) {
             form.addEventListener('submit', this.handleFormSubmit.bind(this));
         }
 
-        // Price update events
         const collarRadios = document.querySelectorAll('input[name="collarType"]');
         const sleeveRadios = document.querySelectorAll('input[name="sleeveType"]');
 
@@ -489,22 +512,22 @@ class JerseyOrderApp {
             radio.addEventListener('change', PriceCalculator.updatePriceDisplay.bind(PriceCalculator));
         });
 
-        // Jersey number uniqueness check
         const jerseyNumberInput = document.getElementById('jerseyNumber');
-
         if (jerseyNumberInput) {
-            const debouncedCheck = this.debounce(this.checkJerseyUniqueness.bind(this), 500);
+            const isMobile = window.innerWidth <= 768;
+            const debounceTime = isMobile ? 800 : 500;
+            const debouncedCheck = this.debounce(this.checkJerseyUniqueness.bind(this), debounceTime);
             jerseyNumberInput.addEventListener('input', debouncedCheck);
         }
 
-        // Name existence check
         const nameInput = document.getElementById('name');
         if (nameInput) {
-            const debouncedNameCheck = this.debounce(this.checkNameExists.bind(this), 500);
+            const isMobile = window.innerWidth <= 768;
+            const debounceTime = isMobile ? 800 : 500;
+            const debouncedNameCheck = this.debounce(this.checkNameExists.bind(this), debounceTime);
             nameInput.addEventListener('input', debouncedNameCheck);
         }
 
-        // Smooth scrolling
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -515,15 +538,18 @@ class JerseyOrderApp {
             });
         });
 
-        // Parallax effect
-        window.addEventListener('scroll', this.debounce(() => {
-            const scrolled = window.pageYOffset;
-            const parallax = document.querySelector('.hero-header');
-            if (parallax) {
-                const speed = scrolled * 0.5;
-                parallax.style.transform = `translateY(${speed}px)`;
-            }
-        }, 10));
+        // OPTIMIZED: Parallax only on desktop
+        const isMobile = window.innerWidth <= 768;
+        if (!isMobile) {
+            window.addEventListener('scroll', this.debounce(() => {
+                const scrolled = window.pageYOffset;
+                const parallax = document.querySelector('.hero-header');
+                if (parallax) {
+                    const speed = scrolled * 0.5;
+                    parallax.style.transform = `translateY(${speed}px)`;
+                }
+            }, 10));
+        }
     }
 
     static setupRealTimeValidation() {
@@ -533,15 +559,14 @@ class JerseyOrderApp {
             const field = document.getElementById(fieldName);
             if (field) {
                 field.addEventListener('blur', () => this.validateSingleField(fieldName));
-                field.addEventListener('input', () => {
+                field.addEventListener('input', this.debounce(() => {
                     if (field.classList.contains('error')) {
                         this.validateSingleField(fieldName);
                     }
-                });
+                }, 300));
             }
         });
 
-        // Radio button validation
         ['collarType', 'sleeveType'].forEach(groupName => {
             const radios = document.querySelectorAll(`input[name="${groupName}"]`);
             radios.forEach(radio => {
@@ -560,7 +585,6 @@ class JerseyOrderApp {
         if (error) {
             FormValidator.showFieldError(fieldName, error);
         } else if (value.trim() || fieldName === 'batch' || fieldName === 'transactionId') {
-            // Only show success for fields with values or optional fields
             FormValidator.showFieldSuccess(fieldName);
         }
     }
@@ -589,14 +613,12 @@ class JerseyOrderApp {
             const result = await ApiService.checkNameExists(name);
 
             if (result.exists) {
-                // Show warning but still allow submission
                 FormValidator.showFieldError('name', 'This jersey name is already taken, but you can still use it without any problem.');
             } else {
                 FormValidator.showFieldSuccess('name');
             }
         } catch (error) {
             console.warn('Name existence check failed:', error);
-            // Don't show error to user for this check, as it's optional
         }
     }
 
@@ -606,7 +628,6 @@ class JerseyOrderApp {
         if (!jerseyNumber) return;
 
         try {
-            // Check jersey number regardless of batch - jersey numbers must be globally unique
             const result = await ApiService.checkJerseyNumber(jerseyNumber, null);
 
             if (!result.available) {
@@ -616,23 +637,18 @@ class JerseyOrderApp {
             }
         } catch (error) {
             console.warn('Jersey uniqueness check failed:', error);
-            // Don't show error to user for this check, as it's optional
         }
     }
 
     static async handleFormSubmit(event) {
         event.preventDefault();
 
-        // Hide all previous messages
         ['success', 'error', 'warning', 'info'].forEach(type => {
             const msg = document.getElementById(`${type}-message`);
             if (msg) msg.style.display = 'none';
         });
 
-        // Collect form data
         const formData = this.collectFormData();
-
-        // Validate form
         const validation = FormValidator.validateForm(formData);
 
         if (!validation.isValid) {
@@ -641,24 +657,17 @@ class JerseyOrderApp {
             return;
         }
 
-        // Calculate final price
         formData.finalPrice = PriceCalculator.calculatePrice(formData.collarType, formData.sleeveType);
         formData.orderDate = new Date().toISOString();
         formData.department = 'ICE';
 
-        // Prepare submission
         const submitRequest = async () => {
             LoadingManager.show('Submitting your jersey order...');
 
             try {
                 const result = await ApiService.submitOrder(formData);
-
-                // Show enhanced success message
                 SuccessHandler.showOrderSuccess(result);
-
-                // Reset form
                 this.resetForm();
-
             } catch (error) {
                 ErrorHandler.handleError(error, 'form-submission');
             } finally {
@@ -666,22 +675,17 @@ class JerseyOrderApp {
             }
         };
 
-        // Set up retry capability
         ErrorHandler.setLastRequest(submitRequest);
-
-        // Submit the order
         await submitRequest();
     }
 
     static collectFormData() {
         const formData = {};
 
-        // Text inputs
         ['name', 'studentId', 'jerseyNumber', 'email', 'transactionId', 'notes', 'batch'].forEach(field => {
             const element = document.getElementById(field);
             const value = element ? element.value.trim() : '';
 
-            // Set empty optional fields to null instead of empty string
             if ((field === 'batch' || field === 'transactionId') && !value) {
                 formData[field] = null;
             } else {
@@ -689,13 +693,11 @@ class JerseyOrderApp {
             }
         });
 
-        // Select inputs
         ['size'].forEach(field => {
             const element = document.getElementById(field);
             formData[field] = element ? element.value : '';
         });
 
-        // Radio inputs
         ['collarType', 'sleeveType'].forEach(field => {
             const element = document.querySelector(`input[name="${field}"]:checked`);
             formData[field] = element ? element.value : '';
@@ -709,7 +711,6 @@ class JerseyOrderApp {
             FormValidator.showFieldError(fieldName, errors[fieldName]);
         });
 
-        // Scroll to first error
         const firstErrorField = Object.keys(errors)[0];
         const firstErrorElement = document.getElementById(firstErrorField);
         if (firstErrorElement) {
@@ -723,12 +724,10 @@ class JerseyOrderApp {
         if (form) {
             form.reset();
 
-            // Clear all validation states
             ['name', 'studentId', 'jerseyNumber', 'batch', 'size', 'email', 'transactionId', 'collarType', 'sleeveType'].forEach(field => {
                 FormValidator.clearFieldValidation(field);
             });
 
-            // Reset price display
             PriceCalculator.updatePriceDisplay();
         }
     }
@@ -746,7 +745,24 @@ class JerseyOrderApp {
     }
 }
 
-// Initialize app when DOM is loaded
+// ============================================
+// PERFORMANCE MONITORING
+// ============================================
+if (window.performance) {
+    window.addEventListener('load', () => {
+        const perfData = window.performance.timing;
+        const pageLoadTime = perfData.loadEventEnd - perfData.navigationStart;
+        
+        if (pageLoadTime > 3000) {
+            console.warn('Slow device detected, optimizing performance');
+            document.body.classList.add('reduce-motion');
+        }
+    });
+}
+
+// ============================================
+// INITIALIZATION
+// ============================================
 document.addEventListener('DOMContentLoaded', () => {
     JerseyOrderApp.init().catch(error => {
         console.error('Failed to initialize app:', error);
@@ -754,13 +770,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// Global error handler
 window.addEventListener('error', (event) => {
     console.error('Global error:', event.error);
     ErrorHandler.handleError(event.error, 'global');
 });
 
-// Unhandled promise rejection handler
 window.addEventListener('unhandledrejection', (event) => {
     console.error('Unhandled promise rejection:', event.reason);
     ErrorHandler.handleError(event.reason, 'promise');
