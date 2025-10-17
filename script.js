@@ -214,9 +214,10 @@ class FormValidator {
     }
 }
 
-// ============================================
 // NETWORK STATUS MONITOR
-// ============================================
+
+
+
 class NetworkMonitor {
     static isOnline = navigator.onLine;
     static statusEl = document.getElementById('networkStatus');
@@ -255,9 +256,10 @@ class NetworkMonitor {
     }
 }
 
-// ============================================
 // LOADING MANAGER
-// ============================================
+
+
+
 class LoadingManager {
     static overlay = document.getElementById('loadingOverlay');
 
@@ -276,9 +278,10 @@ class LoadingManager {
     }
 }
 
-// ============================================
 // API SERVICE
-// ============================================
+
+
+
 class ApiService {
     static baseUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
         ? 'http://localhost:3000/a'
