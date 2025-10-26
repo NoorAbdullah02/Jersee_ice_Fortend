@@ -105,8 +105,8 @@ class FormValidator {
             return null;
         },
         studentId: (value) => {
-            if (!value.trim()) return 'Student ID / Teacher ID is required';
-            if (!/^\d+$/.test(value.trim())) return 'Student ID / Teacher ID must contain only numbers';
+            if (!value.trim()) return 'Phone Number is required';
+            if (!/^\d+$/.test(value.trim())) return 'Numbers must contain only numbers';
             return null;
         },
         jerseyNumber: (value) => {
