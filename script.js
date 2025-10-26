@@ -109,12 +109,22 @@ class FormValidator {
             if (!/^\d+$/.test(value.trim())) return 'Numbers must contain only numbers';
             return null;
         },
+        // jerseyNumber: (value) => {
+        //     if (!value) return 'Jersey number is required';
+        //     const num = parseInt(value);
+        //     if (isNaN(num) || num < 0 || num > 500) return 'Jersey number must be between 0 and 500';
+        //     return null;
+        // },
         jerseyNumber: (value) => {
-            if (!value) return 'Jersey number is required';
-            const num = parseInt(value);
-            if (isNaN(num) || num < 0 || num > 500) return 'Jersey number must be between 0 and 500';
-            return null;
-        },
+        if (!value.trim()) return 'Jersey number is required';
+        if (!/^\d+$/.test(value.trim())) return 'Jersey number must contain only digits';
+        
+        const num = parseInt(value.trim(), 10);
+        if (num < 0 || num > 500) return 'Jersey number must be between 0 and 500';
+        
+        return null;
+         },
+
         batch: (value) => {
             return null; // Optional field
         },
@@ -692,6 +702,10 @@ class JerseyOrderApp {
          if (field === 'name' || field === 'notes') {
             value = value.toUpperCase(); 
             }
+
+            if (field === 'jerseyNumber') {
+              value = value.replace(/\D/g, ''); // only keep digits
+             }
 
             if ((field === 'batch' || field === 'transactionId') && !value) {
                 formData[field] = null;
