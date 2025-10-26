@@ -703,10 +703,6 @@ class JerseyOrderApp {
             value = value.toUpperCase(); 
             }
 
-            if (field === 'jerseyNumber') {
-              value = value.replace(/\D/g, ''); // only keep digits
-             }
-
             if ((field === 'batch' || field === 'transactionId') && !value) {
                 formData[field] = null;
             } else {
