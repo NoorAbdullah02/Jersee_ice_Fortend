@@ -687,7 +687,7 @@ class JerseyOrderApp {
 
         ['name', 'studentId', 'jerseyNumber', 'email', 'transactionId', 'notes', 'batch'].forEach(field => {
             const element = document.getElementById(field);
-            const value = element ? element.value.trim() : '';
+            let value = element ? element.value.trim() : '';
 
          if (field === 'name' || field === 'notes') {
             value = value.toUpperCase(); 
