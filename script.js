@@ -689,6 +689,10 @@ class JerseyOrderApp {
             const element = document.getElementById(field);
             const value = element ? element.value.trim() : '';
 
+             if (field === 'name') {
+            value = value.toUpperCase();
+    }
+
             if ((field === 'batch' || field === 'transactionId') && !value) {
                 formData[field] = null;
             } else {
