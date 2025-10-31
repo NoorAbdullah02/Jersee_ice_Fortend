@@ -120,7 +120,7 @@ class FormValidator {
         if (!/^\d+$/.test(value.trim())) return 'Jersey number must contain only digits';
         
         const num = parseInt(value.trim(), 10);
-        if (num < 0 || num > 500) return 'Jersey number must be between 0 and 500';
+        if (isNaN(num) || num < 0 || num > 500) return 'Jersey number must be between 0 and 500';
         
         return null;
          },
@@ -703,7 +703,10 @@ class JerseyOrderApp {
             value = value.toUpperCase(); 
             }
 
-            if ((field === 'batch' || field === 'transactionId') && !value) {
+            // Keep jerseyNumber as string to preserve leading zeros
+            if (field === 'jerseyNumber') {
+                formData[field] = value; // Store as string "01", "001", etc.
+            } else if ((field === 'batch' || field === 'transactionId') && !value) {
                 formData[field] = null;
             } else {
                 formData[field] = value;
