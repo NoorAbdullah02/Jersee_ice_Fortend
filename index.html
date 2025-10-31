@@ -17,12 +17,10 @@
 </head>
 
 <body>
-    <!-- Network Status Indicator -->
     <div class="network-status" id="networkStatus">
         <i class="fas fa-wifi"></i> <span id="networkText">Connected</span>
     </div>
 
-    <!-- Loading Overlay -->
     <div class="loading-overlay" id="loadingOverlay">
         <div class="loading-content">
             <div class="spinner"></div>
@@ -31,10 +29,8 @@
         </div>
     </div>
 
-    <!-- Advanced Animated Background Particles -->
     <div class="particles"></div>
 
-    <!-- Futuristic Hero Header -->
     <section class="hero-header" data-aos="fade-down">
         <div class="hero-content">
             <h1 class="hero-title" data-aos="fade-up" data-aos-delay="200">
@@ -57,10 +53,8 @@
         </div>
     </section>
 
-    <!-- Glassmorphism Main Container -->
     <div class="main-container" data-aos="fade-up" data-aos-delay="800">
 
-        <!-- 3D Jersey Showcase -->
         <section class="jersey-showcase">
             <div class="jersey-content">
                 <h2 class="jersey-title">OFFICIAL JERSEY OF ICE DEPARTMENT</h2>
@@ -69,13 +63,11 @@
                     <img src="images/latest.webp" alt="ICE Department Jersey" class="jersey-image">
                 </div>
 
-                <!-- Dynamic Price Display -->
                 <div class="price-display" id="priceDisplay">
                     <div class="price-text" id="priceText">৳360</div>
                     <div class="price-label">Starting Price</div>
                 </div>
 
-                <!-- Size Chart Button -->
                 <button type="button" class="btn size-chart-btn" data-bs-toggle="modal"
                     data-bs-target="#sizeChartModal">
                     <i class="fas fa-ruler"></i> View Size Chart
@@ -83,7 +75,6 @@
             </div>
         </section>
 
-        <!-- Ultra Modern Order Form Section -->
         <section class="order-section">
             <h2 class="section-title" data-aos="fade-up">
                 <i class="fas fa-shopping-cart"></i> Place Your Order
@@ -91,10 +82,8 @@
 
             <form id="jersey-order-form" class="order-form" novalidate>
                 <div class="row">
-                    <!-- Name -->
                     <div class="col-lg-6 col-md-6" data-aos="fade-right" data-aos-delay="100">
                         <div class="form-group">
-                            <!-- MODIFY THIS LABEL TEXT -->
                             <label for="name" class="form-label">
                                 <i class="fas fa-user"></i> Enter jersey Name
                             </label>
@@ -107,10 +96,8 @@
                         </div>
                     </div>
 
-                    <!-- Student ID -->
                     <div class="col-lg-6 col-md-6" data-aos="fade-left" data-aos-delay="100">
                         <div class="form-group">
-                            <!-- MODIFY THIS LABEL TEXT -->
                             <label for="studentId" class="form-label">
                                 <i class="fas fa-id-card"></i> Phone Number
                             </label>
@@ -122,7 +109,6 @@
                         </div>
                     </div>
 
-                    <!-- Jersey Number -->
                     <div class="col-lg-6 col-md-6" data-aos="fade-right" data-aos-delay="200">
                         <div class="form-group">
                             
@@ -134,7 +120,7 @@
                                 </div>
                             </label>
                             <div class="position-relative">
-                                <input type="number" class="form-control" id="jerseyNumber" name="jerseyNumber"
+                                <input type="text" class="form-control" id="jerseyNumber" name="jerseyNumber"
                                     placeholder="Enter number (0-500)" min="0" max="500" required>
                                 <div class="error-message" id="jerseyNumberError">Jersey number must be between 0 and
                                     500
@@ -143,10 +129,8 @@
                         </div>
                     </div>
 
-                    <!-- Batch -->
                     <div class="col-lg-6 col-md-6" data-aos="fade-left" data-aos-delay="200">
                         <div class="form-group">
-                            <!-- MODIFY THIS LABEL TEXT -->
                             <label for="batch" class="form-label">
                                 <i class="fas fa-users"></i> Academic Batch (For Students Only)
                             </label>
@@ -177,10 +161,8 @@
                         </div>
                     </div>
 
-                    <!-- Size -->
                     <div class="col-lg-6 col-md-6" data-aos="fade-right" data-aos-delay="300">
                         <div class="form-group">
-                            <!-- MODIFY THIS LABEL TEXT -->
                             <label for="size" class="form-label">
                                 <i class="fas fa-expand-arrows-alt"></i> Jersey Size
                                 <div class="tooltip-container">
@@ -203,10 +185,8 @@
                         </div>
                     </div>
 
-                    <!-- Transaction ID -->
                     <div class="col-lg-6 col-md-6" data-aos="fade-left" data-aos-delay="300">
                         <div class="form-group">
-                            <!-- MODIFY THIS LABEL TEXT -->
                             <label for="transactionId" class="form-label">
                                 <i class="fas fa-receipt"></i> Enter Txn ID (or give Cash to CR)
                                 <div class="tooltip-container">
@@ -316,7 +296,6 @@
                     <!-- Email -->
                     <div class="col-12" data-aos="fade-up" data-aos-delay="500">
                         <div class="form-group">
-                            <!-- MODIFY THIS LABEL TEXT -->
                             <label for="email" class="form-label">
                                 <i class="fas fa-envelope"></i> Contact Email
                             </label>
@@ -328,10 +307,9 @@
                         </div>
                     </div>
 
-                    <!-- Additional Notes -->
+                    <!-- Additionl Note -->
                     <div class="col-12" data-aos="fade-up" data-aos-delay="600">
                         <div class="form-group">
-                            <!-- MODIFY THIS LABEL TEXT -->
                             <label for="notes" class="form-label">
                                 <i class="fas fa-sticky-note"></i> Additional Comments (Optional)
                             </label>
