@@ -104,9 +104,9 @@ class FormValidator {
             if (value.trim().length < 2) return 'Name must be at least 2 characters';
             return null;
         },
-        studentId: (value) => {
-            if (!value.trim()) return 'Phone Number is required';
-            if (!/^\d+$/.test(value.trim())) return 'Numbers must contain only numbers';
+        mobileNumber: (value) => {
+            if (!value.trim()) return 'Mobile Number is required';
+            if (!/^\d+$/.test(value.trim())) return 'Mobile number must contain only digits';
             return null;
         },
         // jerseyNumber: (value) => {
@@ -138,9 +138,7 @@ class FormValidator {
             if (!emailRegex.test(value)) return 'Please enter a valid email address';
             return null;
         },
-        transactionId: (value) => {
-            return null; // Optional field
-        },
+        // transactionId removed from main form — handled in payment modal
         collarType: (value) => {
             if (!value) return 'Please select collar type';
             return null;
@@ -563,10 +561,49 @@ class JerseyOrderApp {
                 }
             }, 10));
         }
+
+        // pm-card clicks: allow quick selection from payment section
+        document.querySelectorAll('.pm-card').forEach(card => {
+            card.addEventListener('click', (e) => {
+                const method = card.getAttribute('data-method');
+                const provider = card.getAttribute('data-provider');
+
+                // Try to collect current form data and validate before opening modal
+                const currentFormData = this.collectFormData();
+                const validation = FormValidator.validateForm(currentFormData);
+
+                if (!validation.isValid) {
+                    // show validation errors and guide user
+                    this.showValidationErrors(validation.errors);
+                    ErrorHandler.showMessage('warning', 'Complete Form', 'Please complete the order form before choosing a payment option.', 4000);
+                    const firstField = Object.keys(validation.errors)[0];
+                    const el = document.getElementById(firstField);
+                    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    return;
+                }
+
+                // compute price for current selection and save pending data, then open modal with preselection
+                currentFormData.finalPrice = PriceCalculator.calculatePrice(currentFormData.collarType, currentFormData.sleeveType);
+                this.pendingOrderData = currentFormData;
+                this.showPaymentModal(this.pendingOrderData);
+
+                // programmatically open provider or set COD after modal appears
+                setTimeout(() => {
+                    const payMethodRadio = document.querySelector(`input[name="payOption"][value="${method === 'cod' ? 'cod' : 'online'}"]`);
+                    if (payMethodRadio) payMethodRadio.checked = true;
+                    if (payMethodRadio) payMethodRadio.dispatchEvent(new Event('change'));
+
+                    if (method !== 'cod' && provider) {
+                        const providerBtn = document.querySelector(`#paymentModal button[data-provider="${provider}"]`) || document.querySelector(`#select${provider}`);
+                        if (providerBtn) providerBtn.click();
+                    }
+                }, 150);
+            });
+        });
     }
 
     static setupRealTimeValidation() {
-        const fields = ['name', 'studentId', 'jerseyNumber', 'batch', 'size', 'email', 'transactionId'];
+    const fields = ['name', 'mobileNumber', 'jerseyNumber', 'batch', 'size', 'email'];
 
         fields.forEach(fieldName => {
             const field = document.getElementById(fieldName);
@@ -597,7 +634,7 @@ class JerseyOrderApp {
 
         if (error) {
             FormValidator.showFieldError(fieldName, error);
-        } else if (value.trim() || fieldName === 'batch' || fieldName === 'transactionId') {
+        } else if (value.trim() || fieldName === 'batch') {
             FormValidator.showFieldSuccess(fieldName);
         }
     }
@@ -670,32 +707,201 @@ class JerseyOrderApp {
             return;
         }
 
+        // Save pending data and show payment modal to let user choose COD or Online
         formData.finalPrice = PriceCalculator.calculatePrice(formData.collarType, formData.sleeveType);
         formData.orderDate = new Date().toISOString();
         formData.department = 'ICE';
 
-        const submitRequest = async () => {
-            LoadingManager.show('Submitting your jersey order...');
+        // store pending order; submission will happen from payment modal
+        this.pendingOrderData = formData;
 
+        // ensure payment modal setup is ready
+        this.showPaymentModal(formData);
+    }
+
+    // Prepare and show payment modal
+    static showPaymentModal(formData) {
+        const paymentModalEl = document.getElementById('paymentModal');
+        if (!paymentModalEl) {
+            // Fallback: submit directly if modal not present
+            this.submitFinalOrder(formData, { method: 'cod' });
+            return;
+        }
+
+        // Lazy init listeners once
+        if (!this._paymentModalInitialized) {
+            this.setupPaymentModal();
+            this._paymentModalInitialized = true;
+        }
+
+        // Update amount to show (online adds +10 BDT)
+        const amountEl = document.getElementById('amountToPay');
+        const base = formData.finalPrice || 0;
+        if (amountEl) amountEl.textContent = (base + 10).toString();
+
+        // reset txn input and messages
+        const txnInput = document.getElementById('paymentTxnId');
+        const txnError = document.getElementById('txnError');
+        if (txnInput) txnInput.value = '';
+        if (txnError) txnError.style.display = 'none';
+
+        // default provider label
+        const providerLabel = document.getElementById('paymentProviderLabel');
+        const sendNumber = document.getElementById('sendNumber');
+        if (providerLabel) providerLabel.textContent = 'bKash';
+        if (sendNumber) sendNumber.textContent = '01637964859';
+
+        // hide online detail block by default
+        document.getElementById('onlineOptions').style.display = 'none';
+        document.getElementById('paymentDetails').style.display = 'none';
+
+        // show modal
+        const bootstrapModal = new bootstrap.Modal(paymentModalEl);
+        bootstrapModal.show();
+        this._bootstrapPaymentModal = bootstrapModal;
+    }
+
+    static setupPaymentModal() {
+        const paymentModalEl = document.getElementById('paymentModal');
+        if (!paymentModalEl) return;
+
+        const payCash = document.getElementById('payCash');
+        const payOnline = document.getElementById('payOnline');
+        const onlineOptions = document.getElementById('onlineOptions');
+        const selectBkash = document.getElementById('selectBkash');
+        const selectNagad = document.getElementById('selectNagad');
+        const paymentDetails = document.getElementById('paymentDetails');
+        const paymentProviderLabel = document.getElementById('paymentProviderLabel');
+        const sendNumber = document.getElementById('sendNumber');
+        const copyNumberBtn = document.getElementById('copyNumberBtn');
+        const copyAmountBtn = document.getElementById('copyAmountBtn');
+        const paymentTxnId = document.getElementById('paymentTxnId');
+        const txnError = document.getElementById('txnError');
+        const paymentSubmitBtn = document.getElementById('paymentSubmitBtn');
+
+        // toggle online options when radio changes
+        [payCash, payOnline].forEach(r => {
+            if (!r) return;
+            r.addEventListener('change', () => {
+                if (payOnline.checked) {
+                    onlineOptions.style.display = 'block';
+                } else {
+                    onlineOptions.style.display = 'none';
+                    paymentDetails.style.display = 'none';
+                }
+            });
+        });
+
+        // provider buttons
+        if (selectBkash) selectBkash.addEventListener('click', () => {
+            if (paymentProviderLabel) paymentProviderLabel.textContent = 'bKash';
+            if (sendNumber) sendNumber.textContent = '01637964859';
+            paymentDetails.style.display = 'block';
+        });
+
+        if (selectNagad) selectNagad.addEventListener('click', () => {
+            if (paymentProviderLabel) paymentProviderLabel.textContent = 'Nagad';
+            if (sendNumber) sendNumber.textContent = '01637964859';
+            paymentDetails.style.display = 'block';
+        });
+
+        // copy helpers
+        if (copyNumberBtn) copyNumberBtn.addEventListener('click', async () => {
             try {
-                const result = await ApiService.submitOrder(formData);
-                SuccessHandler.showOrderSuccess(result);
-                this.resetForm();
-            } catch (error) {
-                ErrorHandler.handleError(error, 'form-submission');
-            } finally {
-                LoadingManager.hide();
+                await navigator.clipboard.writeText(sendNumber.textContent.trim());
+                ErrorHandler.showMessage('info', 'Copied', 'Number copied to clipboard', 2000);
+            } catch (e) {
+                ErrorHandler.showMessage('warning', 'Copy Failed', 'Unable to copy. Please long-press to copy.', 3000);
             }
-        };
+        });
 
-        ErrorHandler.setLastRequest(submitRequest);
-        await submitRequest();
+        if (copyAmountBtn) copyAmountBtn.addEventListener('click', async () => {
+            const amount = document.getElementById('amountToPay')?.textContent || '';
+            try {
+                await navigator.clipboard.writeText(amount.trim());
+                ErrorHandler.showMessage('info', 'Copied', 'Amount copied to clipboard', 2000);
+            } catch (e) {
+                ErrorHandler.showMessage('warning', 'Copy Failed', 'Unable to copy. Please long-press to copy.', 3000);
+            }
+        });
+
+        // submit from modal
+        if (paymentSubmitBtn) paymentSubmitBtn.addEventListener('click', async () => {
+            const payMethod = document.querySelector('input[name="payOption"]:checked')?.value || 'cod';
+
+            if (payMethod === 'cod') {
+                // submit pending order as COD
+                const order = this.pendingOrderData || this.collectFormData();
+                await this.submitFinalOrder(order, { method: 'cod' });
+                return;
+            }
+
+            // online path: ensure provider selected and txn provided
+            if (paymentDetails.style.display === 'none') {
+                ErrorHandler.showMessage('warning', 'Select Provider', 'Please select bKash or Nagad to proceed.', 3000);
+                return;
+            }
+
+            const provider = paymentProviderLabel?.textContent || 'bKash';
+            const txn = (paymentTxnId?.value || '').trim();
+            if (!txn) {
+                if (txnError) txnError.style.display = 'block';
+                return;
+            }
+
+            const order = this.pendingOrderData || this.collectFormData();
+            await this.submitFinalOrder(order, { method: 'online', provider, txn });
+        });
+
+        // clear txn error on input
+        if (paymentTxnId) paymentTxnId.addEventListener('input', () => {
+            if (txnError) txnError.style.display = 'none';
+        });
+    }
+
+    // Final submission after payment selection
+    static async submitFinalOrder(formData, paymentInfo) {
+        // attach payment info to submission payload
+        const payload = { ...formData };
+
+        if (paymentInfo.method === 'cod') {
+            payload.paymentMethod = 'COD';
+            payload.transactionId = null;
+            payload.chargedAmount = payload.finalPrice; // no extra
+            // keep finalPrice as base amount
+        } else {
+            payload.paymentMethod = 'Online';
+            payload.paymentProvider = paymentInfo.provider || 'bKash';
+            payload.transactionId = paymentInfo.txn || null;
+            const charged = (Number(payload.finalPrice) || 0) + 10; // add extra 10 BDT
+            payload.chargedAmount = charged;
+            // update finalPrice so server/email shows amount customer actually paid
+            payload.finalPrice = charged;
+        }
+
+        const paymentModalEl = document.getElementById('paymentModal');
+        try {
+            LoadingManager.show('Submitting your order...');
+            const result = await ApiService.submitOrder(payload);
+
+            // close modal if open
+            if (this._bootstrapPaymentModal) {
+                try { this._bootstrapPaymentModal.hide(); } catch (e) { }
+            }
+
+            SuccessHandler.showOrderSuccess(result);
+            this.resetForm();
+        } catch (error) {
+            ErrorHandler.handleError(error, 'form-submission');
+        } finally {
+            LoadingManager.hide();
+        }
     }
 
     static collectFormData() {
         const formData = {};
 
-        ['name', 'studentId', 'jerseyNumber', 'email', 'transactionId', 'notes', 'batch'].forEach(field => {
+    ['name', 'mobileNumber', 'jerseyNumber', 'email', 'notes', 'batch'].forEach(field => {
             const element = document.getElementById(field);
             let value = element ? element.value.trim() : '';
 
@@ -706,7 +912,7 @@ class JerseyOrderApp {
             // Keep jerseyNumber as string to preserve leading zeros
             if (field === 'jerseyNumber') {
                 formData[field] = value; // Store as string "01", "001", etc.
-            } else if ((field === 'batch' || field === 'transactionId') && !value) {
+            } else if (field === 'batch' && !value) {
                 formData[field] = null;
             } else {
                 formData[field] = value;
@@ -744,8 +950,8 @@ class JerseyOrderApp {
         if (form) {
             form.reset();
 
-            ['name', 'studentId', 'jerseyNumber', 'batch', 'size', 'email', 'transactionId', 'collarType', 'sleeveType'].forEach(field => {
-                FormValidator.clearFieldValidation(field);
+        ['name', 'mobileNumber', 'jerseyNumber', 'batch', 'size', 'email', 'collarType', 'sleeveType'].forEach(field => {
+                    FormValidator.clearFieldValidation(field);
             });
 
             PriceCalculator.updatePriceDisplay();

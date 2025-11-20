@@ -98,14 +98,14 @@
 
                     <div class="col-lg-6 col-md-6" data-aos="fade-left" data-aos-delay="100">
                         <div class="form-group">
-                            <label for="studentId" class="form-label">
-                                <i class="fas fa-id-card"></i> Phone Number
-                            </label>
-                            <div class="position-relative">
-                                <input type="text" class="form-control" id="studentId" name="studentId"
-                                    placeholder="Enter your phone number" required>
-                                <div class="error-message" id="studentIdError">Please enter your phone number</div>
-                            </div>
+                                    <label for="mobileNumber" class="form-label">
+                                        <i class="fas fa-id-card"></i> Mobile Number
+                                    </label>
+                                    <div class="position-relative">
+                                        <input type="text" class="form-control" id="mobileNumber" name="mobileNumber"
+                                            placeholder="Enter your mobile number" required>
+                                        <div class="error-message" id="mobileNumberError">Please enter your mobile number</div>
+                                    </div>
                         </div>
                     </div>
 
@@ -187,17 +187,13 @@
 
                     <div class="col-lg-6 col-md-6" data-aos="fade-left" data-aos-delay="300">
                         <div class="form-group">
-                            <label for="transactionId" class="form-label">
-                                <i class="fas fa-receipt"></i> Enter Txn ID (or give Cash to CR)
-                                <div class="tooltip-container">
-                                    <i class="fas fa-info-circle" style="cursor: help; margin-left: 5px;"></i>
-                                    <span class="tooltip-text">Transaction ID from your payment method</span>
-                                </div>
+                            <label for="email" class="form-label">
+                                <i class="fas fa-envelope"></i> Contact Email
                             </label>
                             <div class="position-relative">
-                                <input type="text" class="form-control" id="transactionId" name="transactionId"
-                                    placeholder="Enter payment transaction ID" required>
-                                <div class="error-message" id="transactionIdError">Please enter transaction ID</div>
+                                <input type="email" class="form-control" id="email" name="email"
+                                    placeholder="Enter your email for confirmation" required>
+                                <div class="error-message" id="emailError">Please enter a valid email address</div>
                             </div>
                         </div>
                     </div>
@@ -293,19 +289,7 @@
                         </div>
                     </div>
 
-                    <!-- Email -->
-                    <div class="col-12" data-aos="fade-up" data-aos-delay="500">
-                        <div class="form-group">
-                            <label for="email" class="form-label">
-                                <i class="fas fa-envelope"></i> Contact Email
-                            </label>
-                            <div class="position-relative">
-                                <input type="email" class="form-control" id="email" name="email"
-                                    placeholder="Enter your email for confirmation" required>
-                                <div class="error-message" id="emailError">Please enter a valid email address</div>
-                            </div>
-                        </div>
-                    </div>
+                    <!-- Email (moved earlier) -->
 
                     <!-- Additionl Note -->
                     <div class="col-12" data-aos="fade-up" data-aos-delay="600">
@@ -323,38 +307,54 @@
                 <div class="payment-section" data-aos="fade-up" data-aos-delay="700">
                     <div class="payment-content">
                         <h3 class="payment-title">
-                            <i class="fas fa-credit-card"></i> Payment Methods
+                            <i class="fas fa-wallet"></i> Choose Payment
                         </h3>
-                        <div id="currentPrice" class="mb-3" style="font-size: 1.5rem; font-weight: 800;">
-                            Current Price: <span id="displayPrice">৳0</span>
-                        </div>
-                        <div class="payment-methods">
-                            <div class="payment-method">
-                                <i class="fab fa-bitcoin fa-3x mb-3"></i>
-                                <h5>Bkash</h5>
-                                <p><strong>01637964859</strong></p>
-                                <p>Please add ৳10 extra for online payments along with your jersey price.</p>
-                                <small>Personal Account</small>
+
+                        <div class="payment-top">
+                            <div id="currentPrice" class="price-badge">
+                                <div class="label">Current Price</div>
+                                <div class="value"><span id="displayPrice">0</span></div>
+                                <div class="sub">(Select Online to add ৳10)</div>
                             </div>
-                            <div class="payment-method">
-                                <i class="fas fa-wallet fa-3x mb-3"></i>
-                                <h5>Nagad</h5>
-                                <p><strong>01637964859</strong></p>
-                                <p>Please add ৳10 extra for online payments along with your jersey price.</p>
-                                <small>Personal Account</small>
-                            </div>
-                            <div class="payment-method">
-                                <i class="fas fa-hand-holding-usd fa-3x mb-3"></i>
-                                <h5>Hand Cash</h5>
-                                <p><strong>Give to CR</strong></p>
-                                <small>Direct Payment</small>
+
+                            <div class="payment-toggle-help">
+                                <p class="muted">Fast. Secure. Verified by CR.</p>
+                                <div class="tiny-note">You will get a detailed instruction after selecting Online payment.</div>
                             </div>
                         </div>
-                        <div class="mt-4">
+
+                        <div class="payment-methods modern" role="list">
+                            <button type="button" class="pm-card pm-card--bkash" data-method="online" data-provider="bKash">
+                                <div class="pm-icon"><img src="images/bkash-icon.png" alt="bKash" onerror="this.style.display='none'"/></div>
+                                <div class="pm-body">
+                                    <div class="pm-title">bKash</div>
+                                    <div class="pm-desc">Fast mobile payments • +৳10 online fee</div>
+                                </div>
+                                <div class="pm-right"> <span class="chev">›</span> </div>
+                            </button>
+
+                            <button type="button" class="pm-card pm-card--nagad" data-method="online" data-provider="Nagad">
+                                <div class="pm-icon"><img src="images/nagad-icon.png" alt="Nagad" onerror="this.style.display='none'"/></div>
+                                <div class="pm-body">
+                                    <div class="pm-title">Nagad</div>
+                                    <div class="pm-desc">Secure QR & send-money • +৳10 online fee</div>
+                                </div>
+                                <div class="pm-right"> <span class="chev">›</span> </div>
+                            </button>
+
+                            <button type="button" class="pm-card pm-card--cod" data-method="cod">
+                                <div class="pm-icon"><i class="fas fa-hand-holding-usd"></i></div>
+                                <div class="pm-body">
+                                    <div class="pm-title">Cash on Delivery</div>
+                                    <div class="pm-desc">Hand Cash to CR • No extra charge</div>
+                                </div>
+                                <div class="pm-right"> <span class="chev">›</span> </div>
+                            </button>
+                        </div>
+
+                        <div class="mt-4 payment-pricing">
                             <h6><i class="fas fa-info-circle"></i> Pricing Structure:</h6>
-                            <ul style="text-align: left; max-width: 400px; margin: 0 auto;">
-                                <!-- <li><strong>Round Collar + Half Sleeve:</strong> ৳400</li>
-                                <li><strong>Round Collar + Full Sleeve:</strong> ৳500</li> -->
+                            <ul class="pricing-list">
                                 <li><strong>Polo Collar + Half Sleeve:</strong> ৳360</li>
                                 <li><strong>Polo Collar + Full Sleeve:</strong> ৳400</li>
                             </ul>
@@ -489,6 +489,65 @@
             </div>
         </div>
     </div>
+
+                <!-- Payment Modal (shown after user fills order form and clicks Submit) -->
+                <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="paymentModalLabel"><i class="fas fa-credit-card"></i> Choose Payment Method</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="payOption" id="payCash" value="cod" checked>
+                                        <label class="form-check-label" for="payCash">Cash on Delivery (Hand Cash to CR)</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="payOption" id="payOnline" value="online">
+                                        <label class="form-check-label" for="payOnline">Online Payment</label>
+                                    </div>
+                                </div>
+
+                                <div id="onlineOptions" style="display:none;">
+                                    <div class="mb-3">
+                                        <button type="button" class="btn btn-outline-primary me-2" id="selectBkash" data-provider="bKash">bKash</button>
+                                        <button type="button" class="btn btn-outline-secondary" id="selectNagad" data-provider="Nagad">Nagad</button>
+                                    </div>
+
+                                    <div id="paymentDetails" style="display:none; border:1px solid #e9ecef; padding:12px; border-radius:6px;">
+                                        <div class="mb-2">
+                                            <strong id="paymentProviderLabel">bKash</strong>
+                                        </div>
+                                        <div class="d-flex align-items-center mb-2">
+                                            <div style="flex:1">Send Money Number:</div>
+                                            <div style="flex:1; text-align:right;"><span id="sendNumber">01637964859</span>
+                                                <button class="btn btn-sm btn-outline-dark ms-2" id="copyNumberBtn">Copy</button>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex align-items-center mb-2">
+                                            <div style="flex:1">Amount to Pay:</div>
+                                            <div style="flex:1; text-align:right; font-weight:800; font-size:1.1rem;">৳<span id="amountToPay">0</span>
+                                                <button class="btn btn-sm btn-outline-dark ms-2" id="copyAmountBtn">Copy</button>
+                                            </div>
+                                        </div>
+
+                                        <div class="mt-3">
+                                            <label for="paymentTxnId" class="form-label">Enter Transaction ID</label>
+                                            <input type="text" id="paymentTxnId" class="form-control" placeholder="Enter transaction / Txn ID">
+                                            <div class="text-danger small mt-1" id="txnError" style="display:none;">Please enter transaction ID</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-primary" id="paymentSubmitBtn">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
     <!-- Footer -->
     <footer class="footer">
